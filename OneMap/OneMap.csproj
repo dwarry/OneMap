@@ -105,6 +105,7 @@
     <Compile Include="OneNote\OneNote2010.cs">
       <DependentUpon>OneNote2010.xsd</DependentUpon>
     </Compile>
+    <Compile Include="OneNote\Persistence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
