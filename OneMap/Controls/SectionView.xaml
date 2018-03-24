@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="OneMap.Controls.SectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OneMap.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="200">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <!--This file is NOT compatible with Silverlight-->
+        <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform" x:Name="Icon">
+            <Canvas Name="svg3751" Width="24" Height="24">
+                <Canvas.RenderTransform>
+                    <TranslateTransform X="0" Y="0"/>
+                </Canvas.RenderTransform>
+                <Canvas.Resources/>
+                <!--Unknown tag: metadata-->
+                <!--Unknown tag: sodipodi:namedview-->
+                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3747">
+                    <Path.Data>
+                        <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                    </Path.Data>
+                </Path>
+                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path3749" Fill="{Binding ElementName=Title,Path=Foreground}">
+                    <Path.Data>
+                        <PathGeometry Figures="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h10v4h8v10z" FillRule="NonZero"/>
+                    </Path.Data>
+                </Path>
+            </Canvas>
+        </Viewbox>
+        <TextBlock x:Name="Title" FontSize="20" VerticalAlignment="Center" Margin="4,0,0,0">
+Hello world
+        </TextBlock>
+    </StackPanel>
+</UserControl>

@@ -37,6 +37,10 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.Microsoft.Office.Interop.OneNote, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Interop.Microsoft.Office.Interop.OneNote.1.1.0.0\lib\net40\Interop.Microsoft.Office.Interop.OneNote.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.6.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.1\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -46,8 +50,8 @@
     <Reference Include="ReactiveUI.Events, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\reactiveui-events.7.3.0\lib\Net45\ReactiveUI.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Splat, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Splat.1.4.0\lib\Net45\Splat.dll</HintPath>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -87,6 +91,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\NotebookView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SectionGroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +114,22 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\NotebookTreeItem.cs" />
+    <Compile Include="Controls\NotebookView.xaml.cs">
+      <DependentUpon>NotebookView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PageTreeItem.cs" />
+    <Compile Include="Controls\PageView.xaml.cs">
+      <DependentUpon>PageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SectionGroupTreeItem.cs" />
+    <Compile Include="Controls\SectionGroupView.xaml.cs">
+      <DependentUpon>SectionGroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SectionTreeItem.cs" />
+    <Compile Include="Controls\SectionView.xaml.cs">
+      <DependentUpon>SectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeItem.cs" />
     <Compile Include="MainWindow.xaml.cs">
