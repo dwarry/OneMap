@@ -30,19 +30,28 @@ namespace OneMap.OneNote
 
     public class OneNotePersistence : IPersistence
     {
-        private readonly Application _app = new Application();
+        private readonly Application _app;
+
+        public OneNotePersistence(Application app = null)
+        {
+            _app = app ?? new Application();
+        }
+
+        private T Read<T>(string xml)
+        {
+            using (var reader = XmlReader.Create(new StringReader(xml)))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+
+                return (T) serializer.Deserialize(reader);
+            }
+        }
 
         public Notebooks LoadNotebooks()
         {
             _app.GetHierarchy("", HierarchyScope.hsPages, out var xml, XMLSchema.xs2010);
 
-            var reader = XmlReader.Create(new StringReader(xml));
-
-
-            var serializer = new XmlSerializer(typeof(Notebooks));
-
-
-            return (Notebooks)serializer.Deserialize(reader);
+            return Read<Notebooks>(xml);
         }
 
         public Page GetPage(string pageId)
