@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OneMap"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="One Map" Height="450" Width="800">
     <Grid>
         
     </Grid>
