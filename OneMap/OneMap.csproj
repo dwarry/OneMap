@@ -91,6 +91,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\HierarchyMindMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NotebookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,6 +118,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\HierarchyMindMap.xaml.cs">
+      <DependentUpon>HierarchyMindMap.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NotebookTreeItem.cs" />
     <Compile Include="Controls\NotebookView.xaml.cs">

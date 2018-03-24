@@ -18,7 +18,7 @@ namespace OneMap.Controls
 
         public NotebookTreeItem(Notebook notebook, int index) : base(index, MakeChildren(notebook))
         {
-            if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
+            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
 
             _notebook = notebook ?? throw new ArgumentNullException(nameof(notebook));
 
@@ -26,18 +26,18 @@ namespace OneMap.Controls
 
             Color = (Color) ColorConverter.ConvertFromString(notebook.color ?? "#dddddd");
 
-            MoveUp = MoveDown = Promote = Demote = DoNothing;
+            //MoveUp = MoveDown = Promote = Demote = DoNothing;
         }
 
         private static IEnumerable<TreeItem> MakeChildren(Notebook notebook)
         {
             int index = 0;
-            foreach (var sg in notebook.SectionGroup)
+            foreach (var sg in notebook.SectionGroup ?? Enumerable.Empty<SectionGroup>())
             {
                 yield return new SectionGroupTreeItem(sg, index++);
             }
 
-            foreach (var s in notebook.Section)
+            foreach (var s in notebook.Section ?? Enumerable.Empty<Section>())
             {
                 yield return new SectionTreeItem(s, index++);
             }

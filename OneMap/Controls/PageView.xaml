@@ -28,6 +28,6 @@
             </Canvas>
         </Viewbox>
 
-<TextBlock x:Name="Title" FontSize="14" VerticalAlignment="Center" Foreground="Aqua">Blah</TextBlock>
+        <TextBlock x:Name="Title" FontSize="14" VerticalAlignment="Center" Foreground="Navy">Blah</TextBlock>
     </StackPanel>
 </UserControl>

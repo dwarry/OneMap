@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using OneMap.OneNote;
 
 namespace OneMap.Controls
 {
-    public class SectionGroupTreeItem : TreeItem{
+    public class SectionGroupTreeItem : TreeItem
+    {
         private readonly SectionGroup _sectionGroup;
 
         public SectionGroupTreeItem(SectionGroup sectionGroup, int index): base(index, MakeChildren(sectionGroup))
@@ -20,12 +22,12 @@ namespace OneMap.Controls
         {
             int index = 0;
 
-            foreach (var sg in group.SectionGroup1)
+            foreach (var sg in group.SectionGroup1 ?? Enumerable.Empty<SectionGroup>())
             {
                 yield return new SectionGroupTreeItem(sg, index++);
             }
 
-            foreach (var s in group.Section)
+            foreach (var s in group.Section ?? Enumerable.Empty<Section>())
             {
                 yield return new SectionTreeItem(s, index++);
             }

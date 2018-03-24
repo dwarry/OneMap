@@ -27,7 +27,7 @@ namespace OneMap.Controls
             InitializeComponent();
 
             this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
-            this.OneWayBind(ViewModel, x => x.Color, x => x.Title.Foreground);
+            this.OneWayBind(ViewModel, x => x.Color, x => x.Title.Foreground, c => new SolidColorBrush(c));
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(

@@ -30,7 +30,7 @@ namespace OneMap.Controls
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
-            "ViewModel", typeof(SectionGroupTreeItem), typeof(SectionView), new PropertyMetadata(default(SectionGroupTreeItem)));
+            "ViewModel", typeof(SectionGroupTreeItem), typeof(SectionGroupView), new PropertyMetadata(default(SectionGroupTreeItem)));
 
 
         public SectionGroupTreeItem ViewModel

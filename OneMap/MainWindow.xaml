@@ -5,10 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OneMap"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:reactiveUi="http://reactiveui.net"
+        xmlns:controls="clr-namespace:OneMap.Controls"
         mc:Ignorable="d"
         Title="One Map" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Orientation="Horizontal">
+            <Button>Foo</Button>
+            <Button>Foo</Button>
+        </StackPanel>
+        <TreeView x:Name="OneNoteHierarchy">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                </Style>
+                <HierarchicalDataTemplate DataType="{x:Type controls:TreeItem}" ItemsSource="{Binding Children}">
+                    <reactiveUi:ViewModelViewHost ViewModel="{Binding ViewModel}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </DockPanel>
 </mah:MetroWindow>
 
