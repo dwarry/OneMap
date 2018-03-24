@@ -28,15 +28,22 @@ namespace OneMap.Controls
 
         private TreeItem _parent;
 
-        protected TreeItem(IEnumerable<TreeItem> children = null)
+        protected TreeItem(int index, IEnumerable<TreeItem> children = null)
         {
+            if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
+
             Children = new ReactiveList<TreeItem>();
+
+            Index = index;
 
             if (children == null) return;
 
-            foreach (var child in children)
+            using (Children.SuppressChangeNotifications())
             {
-                AddChild(child);
+                foreach (var child in children)
+                {
+                    AddChild(child);
+                }
             }
         }
 
@@ -46,6 +53,14 @@ namespace OneMap.Controls
         {
             get { return _title; }
             set { this.RaiseAndSetIfChanged(ref _title, value); }
+        }
+
+        private int _index;
+
+        public int Index
+        {
+            get { return _index; }
+            set { this.RaiseAndSetIfChanged(ref _index, value); }
         }
 
 

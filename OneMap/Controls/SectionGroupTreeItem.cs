@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using OneMap.OneNote;
 
@@ -7,12 +8,27 @@ namespace OneMap.Controls
     public class SectionGroupTreeItem : TreeItem{
         private readonly SectionGroup _sectionGroup;
 
-        public SectionGroupTreeItem(SectionGroup sectionGroup)
+        public SectionGroupTreeItem(SectionGroup sectionGroup, int index): base(index, MakeChildren(sectionGroup))
         {
             _sectionGroup = sectionGroup ?? throw new ArgumentNullException(nameof(sectionGroup));
 
             Title = sectionGroup.name;
 
+        }
+
+        private static IEnumerable<TreeItem> MakeChildren(SectionGroup group)
+        {
+            int index = 0;
+
+            foreach (var sg in group.SectionGroup1)
+            {
+                yield return new SectionGroupTreeItem(sg, index++);
+            }
+
+            foreach (var s in group.Section)
+            {
+                yield return new SectionTreeItem(s, index++);
+            }
         }
 
     }

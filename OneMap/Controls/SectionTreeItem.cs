@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 
 using OneMap.OneNote;
@@ -11,13 +12,23 @@ namespace OneMap.Controls
     {
         private readonly Section _section;
 
-        public SectionTreeItem(Section section)
+        public SectionTreeItem(Section section, int index): base(index, MakeChildren(section))
         {
             _section = section ?? throw new ArgumentNullException(nameof(section));
 
             Title = section.name;
 
             Color = (Color) ColorConverter.ConvertFromString(section.color ?? "#aaaaaa");
+        }
+
+        private static IEnumerable<TreeItem> MakeChildren(Section section)
+        {
+            int index = 0;
+
+            foreach (var p in section.Page)
+            {
+                yield return new PageTreeItem(p, index++);
+            }
         }
 
         private Color _color;

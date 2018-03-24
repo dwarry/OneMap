@@ -8,7 +8,7 @@ namespace OneMap.Controls
     {
         private readonly Page _page;
 
-        public PageTreeItem(Page page)
+        public PageTreeItem(Page page, int index): base(index, null)
         {
             _page = page ?? throw new ArgumentNullException(nameof(page));
 
