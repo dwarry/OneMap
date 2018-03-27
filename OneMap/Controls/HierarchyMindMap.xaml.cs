@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using ReactiveUI;
+using ReactiveUI.Events;
 
 using Splat;
 
@@ -30,6 +31,20 @@ namespace OneMap.Controls
 
             ViewModel = Locator.Current.GetService<OneNoteHierarchyMindMapViewModel>();
 
+            this.Events().Loaded.Subscribe(args =>
+            {
+                var adornerLayer = AdornerLayer.GetAdornerLayer(LeftTree);
+
+                var leftAdorner = new MindMapLinkAdorner(LeftTree, Title, true);
+
+                adornerLayer.Add(leftAdorner);
+
+                adornerLayer = AdornerLayer.GetAdornerLayer(RightTree);
+
+                adornerLayer.Add(new MindMapLinkAdorner(RightTree, Title, false));
+
+            });
+
             DataContext = ViewModel;
 
             this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
@@ -42,8 +57,8 @@ namespace OneMap.Controls
 
         public OneNoteHierarchyMindMapViewModel ViewModel
         {
-            get { return (OneNoteHierarchyMindMapViewModel) GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
+            get => (OneNoteHierarchyMindMapViewModel) GetValue(ViewModelProperty);
+            set => SetValue(ViewModelProperty, value);
         }
 
 

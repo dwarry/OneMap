@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Linq;
 
 using OneMap.OneNote;
 
@@ -29,9 +30,9 @@ namespace OneMap.Controls
         {
             _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
 
-            LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > AllTreeItems.Count / 2);
+            LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > (AllTreeItems.Count / 2) - 1);
 
-            RightTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index <= AllTreeItems.Count / 2);
+            RightTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index <= (AllTreeItems.Count / 2) - 1);
 
             var settingSelectedItem = false;
 
@@ -61,10 +62,10 @@ namespace OneMap.Controls
                 settingSelectedItem = false;
             });
 
-//            ViewModel = this;
+            ViewModel = this;
         }
 
-        public MindMapViewModel ViewModel { get; } 
+        public MindMapViewModel ViewModel { get; }
 
         private string _title;
 
@@ -117,7 +118,7 @@ namespace OneMap.Controls
 
     public class OneNoteHierarchyMindMapViewModel : MindMapViewModel, ISupportsActivation
     {
-        public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null): base(persistence)
+        public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null) : base(persistence)
         {
             Title = "Hierarchy";
 
@@ -127,50 +128,36 @@ namespace OneMap.Controls
 
             AllTreeItems.AddRange(treeItems);
 
-            var canMoveUp = this.WhenAnyObservable(x => x.SelectedItem.CanMoveUp);
+            var canMoveUp = this.WhenAnyValue(x => x.SelectedItem)
+                .Select(x => x != null && x.CanMoveUp);
 
             MoveUp = ReactiveCommand.Create(() => SelectedItem.MoveUp(), canMoveUp);
 
-            var canMoveDown = this.WhenAnyObservable(x => x.SelectedItem.CanMoveDown);
+            var canMoveDown = this.WhenAnyValue(x => x.SelectedItem)
+                .Select(x => x != null && x.CanMoveDown);
 
             MoveDown = ReactiveCommand.Create(() => SelectedItem.MoveDown(), canMoveDown);
 
-            var canPromote = this.WhenAnyObservable(x => x.SelectedItem.CanPromote);
+            var canPromote = this.WhenAnyValue(x => x.SelectedItem)
+                .Select(x => x != null && x.CanPromote);
 
             Promote = ReactiveCommand.Create(() => SelectedItem.Promote(), canPromote);
 
-            var canDemote = this.WhenAnyObservable(x => x.SelectedItem.CanDemote);
+            var canDemote = this.WhenAnyValue(x => x.SelectedItem)
+                .Select(x => x != null && x.CanDemote);
 
             Demote = ReactiveCommand.Create(() => SelectedItem.Demote(), canDemote);
         }
 
-        
-
-        public ReactiveCommand MoveUp { get; }
-
-        public ReactiveCommand MoveDown { get; }
-
-        public ReactiveCommand Demote { get; }
-
-        public ReactiveCommand Promote { get; }
-
-        public ViewModelActivator Activator { get; }
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 
 
     public class PageContentMindMapViewModel : MindMapViewModel
     {
-        public PageContentMindMapViewModel(IPersistence persistence = null): base(persistence)
+        public PageContentMindMapViewModel(string pageId, IPersistence persistence = null) : base(persistence)
         {
-            
+            // _persistence.LoadPageContents(pageId)
         }
-
-        public ReactiveCommand MoveUp { get; }
-
-        public ReactiveCommand MoveDown { get; }
-
-        public ReactiveCommand Demote { get; }
-
-        public ReactiveCommand Promote { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using OneMap.OneNote;
 
@@ -6,6 +7,7 @@ using ReactiveUI;
 
 namespace OneMap.Controls
 {
+    [DebuggerDisplay("PageTreeItem({Title})")]
     public class PageTreeItem : TreeItem
     {
         private const int MaxPageDepth = 3;

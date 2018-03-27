@@ -122,6 +122,7 @@
     <Compile Include="Controls\HierarchyMindMap.xaml.cs">
       <DependentUpon>HierarchyMindMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MindMapLinkAdorner.cs" />
     <Compile Include="Controls\MindMapViewModel.cs" />
     <Compile Include="Controls\NotebookTreeItem.cs" />
     <Compile Include="Controls\NotebookView.xaml.cs">

@@ -35,6 +35,7 @@ namespace OneMap
             Locator.CurrentMutable.Register(() => new SectionView(), typeof(IViewFor<SectionTreeItem>));
             Locator.CurrentMutable.Register(() => new PageView(), typeof(IViewFor<PageTreeItem>));
 
+            Locator.CurrentMutable.Register(() => new HierarchyMindMap(), typeof(IViewFor<OneNoteHierarchyMindMapViewModel>));
             Locator.CurrentMutable.Register(() => new OneNoteHierarchyMindMapViewModel(), typeof(OneNoteHierarchyMindMapViewModel));
             Locator.CurrentMutable.Register(() => new HierarchyMindMap(), typeof(IViewFor<OneNoteHierarchyMindMapViewModel>));
 

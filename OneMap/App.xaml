@@ -13,6 +13,11 @@
                 <!-- Accent and AppTheme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Indigo.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+
+                <ResourceDictionary>
+                    <Color x:Key="MindMapSelectedBackgroundColor" R="68" B="255" G="68"></Color>
+                    <Color x:Key="MindMapSelectedUnfocusedColor" R="255" B="25" G="255"></Color>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

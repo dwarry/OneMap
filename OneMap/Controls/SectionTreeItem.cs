@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media;
 
@@ -9,6 +10,8 @@ using ReactiveUI;
 
 namespace OneMap.Controls
 {
+    
+    [DebuggerDisplay("SectionTreeItem({Title})")]
     public class SectionTreeItem : TreeItem
     {
         private readonly Section _section;

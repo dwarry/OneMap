@@ -116,7 +116,7 @@
             </Button>
         </StackPanel>
 
-        <TabControl ItemsSource="{Binding Tabs}">
+        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}">
             <TabControl.ItemTemplate>
                 <DataTemplate><TextBlock Text="{Binding Title}"></TextBlock></DataTemplate>
             </TabControl.ItemTemplate>

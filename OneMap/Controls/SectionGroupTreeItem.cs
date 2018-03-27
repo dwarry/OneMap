@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using OneMap.OneNote;
 
 namespace OneMap.Controls
 {
+    [DebuggerDisplay("SectionGroupTreeItem({Title})")]
     public class SectionGroupTreeItem : TreeItem
     {
         private readonly SectionGroup _sectionGroup;

@@ -17,7 +17,7 @@ namespace OneMap.Controls
 
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get => _isExpanded;
             set { this.RaiseAndSetIfChanged(ref _isExpanded, value); }
         }
 
@@ -27,7 +27,7 @@ namespace OneMap.Controls
 
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get => _isSelected;
             set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
         }
 
@@ -54,33 +54,33 @@ namespace OneMap.Controls
                 }
             }
 
-            CanMoveUp = this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
-                .Select(args => args.Item1 != null && args.Item2 > 0);
+            this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
+                .Select(args => args.Item1 != null && args.Item2 > 0)
+                .ToProperty(this, x=>x.CanMoveUp, out _canMoveUp);
 
-            CanMoveDown = this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
-                .Select(args => args.Item1 != null && args.Item2 < args.Item1.Children.Count - 1);
+            this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
+                .Select(args => args.Item1 != null && args.Item2 < args.Item1.Children.Count - 1)
+                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
 
-            CanPromote = Observable.Defer(() => Observable.Return(false));
+            Observable.Return(false).ToProperty(this, x => x.CanPromote, out _canPromote);
 
-            CanDemote = Observable.Defer(() => Observable.Return(false));
+            Observable.Return(false).ToProperty(this, x=> x.CanDemote, out _canDemote);
         }
 
         private string _title;
 
-
         public string Title
         {
-            get { return _title; }
+            get => _title;
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
 
         private int _index;
 
-
         public int Index
         {
-            get { return _index; }
+            get => _index;
             set { this.RaiseAndSetIfChanged(ref _index, value); }
         }
 
@@ -118,26 +118,44 @@ namespace OneMap.Controls
         }
 
 
-        public IObservable<bool> CanMoveUp { get; protected set; }
+        private ObservableAsPropertyHelper<bool> _canMoveUp;
+
+        public bool CanMoveUp => _canMoveUp.Value;
 
         public virtual void MoveUp() { }
 
-        public IObservable<bool> CanMoveDown { get; protected set; }
+        private ObservableAsPropertyHelper<bool> _canMoveDown;
+
+        public bool CanMoveDown => _canMoveDown.Value;
 
         public virtual void MoveDown()
         {
         }
 
-        public IObservable<bool> CanPromote { get; protected set; }
+
+        private ObservableAsPropertyHelper<bool> _canPromote;
+
+        public bool CanPromote => _canPromote.Value;
 
         public virtual void Promote()
         {
         }
 
-        public IObservable<bool> CanDemote { get; protected set; }
+        private ObservableAsPropertyHelper<bool> _canDemote;
+
+        public bool CanDemote => _canDemote.Value;
 
         public virtual void Demote()
         {
+        }
+    }
+
+
+    public class RootTreeItem : TreeItem
+    {
+        public RootTreeItem(IEnumerable<TreeItem> children = null): base(0, children)
+        {
+            Title = "OneNote";
         }
     }
 }
