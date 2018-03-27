@@ -16,8 +16,8 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>       
         
-        <TreeView x:Name="LeftTree" Grid.Row="0" Grid.Column="0"></TreeView>
-        <TextBlock x:Name="Title" Grid.Row="0" Grid.Column="1" FontSize="24" MaxWidth="200" TextWrapping="WrapWithOverflow">Title A long wod which</TextBlock>
-        <TreeView x:Name="RightTree" Grid.Row="0" Grid.Column="2"></TreeView>
+        <TreeView x:Name="LeftTree" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Path=ViewModel.LeftTreeItems}"></TreeView>
+        <TextBlock x:Name="Title" Grid.Row="0" Grid.Column="1" FontSize="24" MaxWidth="250" TextWrapping="WrapWithOverflow">OneNote</TextBlock>
+        <TreeView x:Name="RightTree" Grid.Row="0" Grid.Column="2" ItemsSource="{Binding ViewModel.RightTreeItems}"></TreeView>
     </Grid>
 </UserControl>

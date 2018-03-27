@@ -13,13 +13,18 @@ namespace OneMap.Controls
     {
 
         bool _isExpanded;
+
+
         public bool IsExpanded
         {
             get { return _isExpanded; }
             set { this.RaiseAndSetIfChanged(ref _isExpanded, value); }
         }
 
+
         bool _isSelected;
+
+
         public bool IsSelected
         {
             get { return _isSelected; }
@@ -49,9 +54,19 @@ namespace OneMap.Controls
                 }
             }
 
+            CanMoveUp = this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
+                .Select(args => args.Item1 != null && args.Item2 > 0);
+
+            CanMoveDown = this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
+                .Select(args => args.Item1 != null && args.Item2 < args.Item1.Children.Count - 1);
+
+            CanPromote = Observable.Defer(() => Observable.Return(false));
+
+            CanDemote = Observable.Defer(() => Observable.Return(false));
         }
 
         private string _title;
+
 
         public string Title
         {
@@ -59,7 +74,9 @@ namespace OneMap.Controls
             set { this.RaiseAndSetIfChanged(ref _title, value); }
         }
 
+
         private int _index;
+
 
         public int Index
         {
@@ -67,13 +84,16 @@ namespace OneMap.Controls
             set { this.RaiseAndSetIfChanged(ref _index, value); }
         }
 
+
         private TreeItem _parent;
+
 
         public TreeItem Parent
         {
             get => _parent;
             set => this.RaiseAndSetIfChanged(ref _parent, value);
         }
+
 
         public ReactiveList<TreeItem> Children { get; }
 
@@ -90,37 +110,34 @@ namespace OneMap.Controls
             IsExpanded = true;
             _parent?.ExpandPath();
         }
+
         public void CollapsePath()
         {
             IsExpanded = false;
             _parent?.CollapsePath();
         }
 
-        protected void SetupDefaultMoveUpAndDownGuards()
-        {
 
+        public IObservable<bool> CanMoveUp { get; protected set; }
+
+        public virtual void MoveUp() { }
+
+        public IObservable<bool> CanMoveDown { get; protected set; }
+
+        public virtual void MoveDown()
+        {
         }
 
+        public IObservable<bool> CanPromote { get; protected set; }
 
-        protected static IObservable<bool> AlwaysFalse = Observable.Repeat(false);
+        public virtual void Promote()
+        {
+        }
 
-//        protected static readonly ReactiveCommand DoNothing = 
-//                ReactiveCommand.Create(() => { }, AlwaysFalse);
+        public IObservable<bool> CanDemote { get; protected set; }
 
-        protected IObservable<bool> _canMoveUp = AlwaysFalse;
-
-        public ReactiveCommand MoveUp { get; protected set; }
-
-        protected IObservable<bool> _canMoveDown = AlwaysFalse;
-        public ReactiveCommand MoveDown { get; protected set; }
-
-        protected IObservable<bool> _canPromote = AlwaysFalse;
-
-        public ReactiveCommand Promote { get; protected set; }
-
-        protected IObservable<bool> _canDemote = AlwaysFalse;
-
-        public ReactiveCommand Demote { get; protected set; }
-
+        public virtual void Demote()
+        {
+        }
     }
 }

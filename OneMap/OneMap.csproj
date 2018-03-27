@@ -122,10 +122,12 @@
     <Compile Include="Controls\HierarchyMindMap.xaml.cs">
       <DependentUpon>HierarchyMindMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MindMapViewModel.cs" />
     <Compile Include="Controls\NotebookTreeItem.cs" />
     <Compile Include="Controls\NotebookView.xaml.cs">
       <DependentUpon>NotebookView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OneNoteTreeItem.cs" />
     <Compile Include="Controls\PageTreeItem.cs" />
     <Compile Include="Controls\PageView.xaml.cs">
       <DependentUpon>PageView.xaml</DependentUpon>
@@ -145,6 +147,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="OneNote\OneNote2010.cs">
       <DependentUpon>OneNote2010.xsd</DependentUpon>
     </Compile>

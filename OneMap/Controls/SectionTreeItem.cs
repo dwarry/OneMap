@@ -28,10 +28,35 @@ namespace OneMap.Controls
         private static IEnumerable<TreeItem> MakeChildren(Section section)
         {
             int index = 0;
+            var nestedPages = new Stack<PageTreeItem>();
 
             foreach (var p in section.Page ?? Enumerable.Empty<Page>())
             {
-                yield return new PageTreeItem(p, index++);
+                var pti = new PageTreeItem(p, index++);
+
+                if (nestedPages.Count == 0 || pti.PageDepth == 1)
+                {
+                    yield return pti;
+                    nestedPages.Clear();
+                    nestedPages.Push(pti);
+                }
+                else if( pti.PageDepth > nestedPages.Peek().PageDepth)
+                {
+                    nestedPages.Peek().AddChild(pti);
+                    nestedPages.Push(pti);
+                }
+                else
+                {
+                    PageTreeItem previousPti = nestedPages.Pop();
+
+                    while (pti.PageDepth >= previousPti.PageDepth && nestedPages.Count > 0)
+                    {
+                        previousPti = nestedPages.Pop();
+                    }
+
+                    previousPti.AddChild(pti);
+                    nestedPages.Push(previousPti);
+                }
             }
         }
 

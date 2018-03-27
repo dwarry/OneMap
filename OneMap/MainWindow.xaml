@@ -10,21 +10,122 @@
         mc:Ignorable="d"
         Title="One Map" Height="450" Width="800">
     <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button>Foo</Button>
-            <Button>Foo</Button>
-        </StackPanel>
-        <TreeView x:Name="OneNoteHierarchy">
-            <TreeView.Resources>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin="4,4,4,4">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="MaxWidth" Value="64"></Setter>
                 </Style>
-                <HierarchicalDataTemplate DataType="{x:Type controls:TreeItem}" ItemsSource="{Binding Children}">
-                    <reactiveUi:ViewModelViewHost ViewModel="{Binding ViewModel}"/>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-        </TreeView>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="Demote">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                        <Canvas Name="svg6" Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path2" Fill="#FF000000">
+                                <Path.Data>
+                                    <PathGeometry Figures="M11 17h10v-2H11v2zm-8-5l4 4V8l-4 4zm0 9h18v-2H3v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4">
+                                <Path.Data>
+                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock>Demote</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="Promote">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                        <Canvas Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                                <Path.Data>
+                                    <PathGeometry Figures="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+                                <Path.Data>
+                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock>Promote</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="MoveUp">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                        <Canvas Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                                <Path.Data>
+                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                                <Path.Data>
+                                    <PathGeometry Figures="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+
+                    <TextBlock>Up</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button x:Name="MoveDown">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                        <Canvas Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <!--Unknown tag: metadata-->
+                            <!--Unknown tag: sodipodi:namedview-->
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                                <Path.Data>
+                                    <PathGeometry Figures="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                                <Path.Data>
+                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock>Down</TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <TabControl ItemsSource="{Binding Tabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate><TextBlock Text="{Binding Title}"></TextBlock></DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type controls:MindMapViewModel}">
+                    <reactiveUi:ViewModelViewHost ViewModel="{Binding ViewModel}"></reactiveUi:ViewModelViewHost>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </DockPanel>
 </mah:MetroWindow>
 
