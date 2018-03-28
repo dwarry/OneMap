@@ -95,11 +95,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\LeftTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NotebookView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RightTree.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,6 +130,9 @@
     <Compile Include="Controls\HierarchyMindMap.xaml.cs">
       <DependentUpon>HierarchyMindMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LeftTree.xaml.cs">
+      <DependentUpon>LeftTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MindMapLinkAdorner.cs" />
     <Compile Include="Controls\MindMapViewModel.cs" />
     <Compile Include="Controls\NotebookTreeItem.cs" />
@@ -132,6 +143,9 @@
     <Compile Include="Controls\PageTreeItem.cs" />
     <Compile Include="Controls\PageView.xaml.cs">
       <DependentUpon>PageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RightTree.xaml.cs">
+      <DependentUpon>RightTree.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SectionGroupTreeItem.cs" />
     <Compile Include="Controls\SectionGroupView.xaml.cs">
