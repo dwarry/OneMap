@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows.Media;
 
 using OneMap.OneNote;
@@ -26,6 +27,9 @@ namespace OneMap.Controls
             Color = (section.color ?? "").StartsWith("#")
                 ? (Color) ColorConverter.ConvertFromString(section.color ?? "#aaaaaa")
                 : Color.FromRgb(34,34,34);
+
+
+            this.WhenAnyValue(x => x.Color).Select(DeriveForegroundColour).ToProperty(this, x => x.ForegroundColor, out _foregroundColor);
         }
 
         private static IEnumerable<TreeItem> MakeChildren(Section section)
@@ -68,8 +72,17 @@ namespace OneMap.Controls
 
         public Color Color
         {
-            get { return _color; }
-            set { this.RaiseAndSetIfChanged(ref _color, value); }
+            get => _color;
+            set => this.RaiseAndSetIfChanged(ref _color, value);
+        }
+
+
+        private ObservableAsPropertyHelper<Color> _foregroundColor;
+
+
+        public Color ForegroundColor
+        {
+            get => _foregroundColor.Value;
         }
     }
 }

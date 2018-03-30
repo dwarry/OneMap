@@ -116,13 +116,15 @@
             </Button>
         </StackPanel>
 
-        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}">
+        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}" >
             <TabControl.ItemTemplate>
                 <DataTemplate><TextBlock Text="{Binding Title}"></TextBlock></DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type controls:MindMapViewModel}">
-                    <reactiveUi:ViewModelViewHost ViewModel="{Binding ViewModel}"></reactiveUi:ViewModelViewHost>
+                    <ScrollViewer>
+                        <reactiveUi:ViewModelViewHost  ViewModel="{Binding ViewModel}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></reactiveUi:ViewModelViewHost>
+                    </ScrollViewer>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

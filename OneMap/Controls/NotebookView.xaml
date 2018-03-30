@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:OneMap.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="200">
-    <StackPanel Orientation="Horizontal">
+    <StackPanel Orientation="Horizontal" Margin="8,8,8,8">
         <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
             <Canvas Name="svg3775" Width="24" Height="24">
                 <Canvas.RenderTransform>

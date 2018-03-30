@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 using ReactiveUI;
 
@@ -148,6 +149,22 @@ namespace OneMap.Controls
         public virtual void Demote()
         {
         }
+
+
+        protected static Color DeriveForegroundColour(Color c)
+        {
+            const double threshold = 0.35;
+
+            // from https://stackoverflow.com/questions/3116260/given-a-background-color-how-to-get-a-foreground-color-that-makes-it-readable-o
+            var r = Math.Pow(c.R / 255.0, 2.2);
+            var g = Math.Pow(c.G / 255.0, 2.2);
+            var b = Math.Pow(c.B / 255.0, 2.2);
+
+            var brightness = (0.2126 * r) + (0.7151 * g) + (0.0721 * b);
+
+            return brightness > threshold ? Colors.Black : Colors.WhiteSmoke;
+        }
+
     }
 
 
