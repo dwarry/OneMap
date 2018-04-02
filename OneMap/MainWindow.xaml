@@ -14,25 +14,34 @@
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="MaxWidth" Value="64"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter Property="Foreground" Value="Black"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="Gray"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                 </Style>
+
             </StackPanel.Resources>
             <Button x:Name="Demote">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                     <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
-                        <Canvas Name="svg6" Width="24" Height="24">
+                        <Canvas Width="24" Height="24">
                             <Canvas.RenderTransform>
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path2" Fill="#FF000000">
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M11 17h10v-2H11v2zm-8-5l4 4V8l-4 4zm0 9h18v-2H3v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
                                 </Path.Data>
                             </Path>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path4">
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
                                 <Path.Data>
                                     <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -50,7 +59,7 @@
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -67,18 +76,18 @@
             </Button>
             <Button x:Name="MoveUp">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                    <Viewbox Stretch="Uniform">
                         <Canvas Width="24" Height="24">
                             <Canvas.RenderTransform>
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                            <Path>
                                 <Path.Data>
                                     <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
                                 </Path.Data>
                             </Path>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                            <Path Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -91,7 +100,7 @@
             </Button>
             <Button x:Name="MoveDown">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                    <Viewbox Stretch="Uniform">
                         <Canvas Width="24" Height="24">
                             <Canvas.RenderTransform>
                                 <TranslateTransform X="0" Y="0"/>
@@ -99,7 +108,7 @@
                             <Canvas.Resources/>
                             <!--Unknown tag: metadata-->
                             <!--Unknown tag: sodipodi:namedview-->
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="#FF000000">
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -116,7 +125,7 @@
             </Button>
         </StackPanel>
 
-        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}" >
+        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}">
             <TabControl.ItemTemplate>
                 <DataTemplate><TextBlock Text="{Binding Title}"></TextBlock></DataTemplate>
             </TabControl.ItemTemplate>

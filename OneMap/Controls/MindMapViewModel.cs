@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using OneMap.OneNote;
@@ -13,7 +14,7 @@ namespace OneMap.Controls
 
 
 
-    public class MindMapViewModel : ReactiveObject
+    public abstract class MindMapViewModel : ReactiveObject, ISupportsActivation, IEnableLogger
     {
         protected readonly IPersistence _persistence;
 
@@ -28,6 +29,10 @@ namespace OneMap.Controls
 
         protected MindMapViewModel(IPersistence persistence = null)
         {
+            this.Log().Debug("Creating {0}", this.GetType().Name);
+
+            ViewModel = this;
+
             _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
 
             LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > (AllTreeItems.Count / 2) - 1);
@@ -36,33 +41,58 @@ namespace OneMap.Controls
 
             var settingSelectedItem = false;
 
-            this.WhenAnyValue(x => x.LeftSelection).Subscribe(x =>
+            this.WhenActivated(d =>
             {
-                if (settingSelectedItem) return;
+                this.WhenAnyValue(x => x.LeftSelection).Subscribe(x =>
+                {
+                    if (settingSelectedItem) return;
 
-                settingSelectedItem = true;
+                    settingSelectedItem = true;
 
-                RightSelection = null;
+                    RightSelection = null;
 
-                SelectedItem = x;
+                    SelectedItem = x;
 
-                settingSelectedItem = false;
+                    settingSelectedItem = false;
+                }).DisposeWith(d);
+
+                this.WhenAnyValue(x => x.RightSelection).Subscribe(x =>
+                {
+                    if (settingSelectedItem) return;
+
+                    settingSelectedItem = true;
+
+                    LeftSelection = null;
+
+                    SelectedItem = x;
+
+                    settingSelectedItem = false;
+                }).DisposeWith(d);
+
             });
 
-            this.WhenAnyValue(x => x.RightSelection).Subscribe(x =>
-            {
-                if (settingSelectedItem) return;
+           
+            var falseWhenNothingSelected =
+                this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
 
-                settingSelectedItem = true;
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveUp ")
+                .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
 
-                LeftSelection = null;
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveDown ")
+                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
 
-                SelectedItem = x;
+            this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
+                .Log(this, "canPromote ")
+                .ToProperty(this, x => x.CanPromote, out _canPromote);
 
-                settingSelectedItem = false;
-            });
+            this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
+                .Log(this, "canDemote ")
+                .ToProperty(this, x => x.CanDemote, out _canDemote);
 
-            ViewModel = this;
+
+
         }
 
         public MindMapViewModel ViewModel { get; }
@@ -106,17 +136,36 @@ namespace OneMap.Controls
 
         public IReactiveDerivedList<TreeItem> RightTreeItems { get; }
 
-        public ReactiveCommand MoveUp { get; protected set; }
 
-        public ReactiveCommand MoveDown { get; protected set; }
+        protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
-        public ReactiveCommand Demote { get; protected set; }
+        public bool CanMoveUp => _canMoveUp.Value;
 
-        public ReactiveCommand Promote { get; protected set; }
+        public abstract void MoveUp();
+
+        protected ObservableAsPropertyHelper<bool> _canMoveDown;
+
+        public bool CanMoveDown => _canMoveDown.Value;
+
+        public abstract void MoveDown();
+
+        protected ObservableAsPropertyHelper<bool> _canDemote;
+
+        public bool CanDemote => _canDemote.Value;
+
+        public abstract void Demote();
+
+        protected ObservableAsPropertyHelper<bool> _canPromote;
+
+        public bool CanPromote => _canPromote.Value;
+
+        public abstract void Promote();
+
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 
 
-    public class OneNoteHierarchyMindMapViewModel : MindMapViewModel, ISupportsActivation
+    public class OneNoteHierarchyMindMapViewModel : MindMapViewModel
     {
         public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null) : base(persistence)
         {
@@ -128,28 +177,28 @@ namespace OneMap.Controls
 
             AllTreeItems.AddRange(treeItems);
 
-            var canMoveUp = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanMoveUp);
-
-            MoveUp = ReactiveCommand.Create(() => SelectedItem.MoveUp(), canMoveUp);
-
-            var canMoveDown = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanMoveDown);
-
-            MoveDown = ReactiveCommand.Create(() => SelectedItem.MoveDown(), canMoveDown);
-
-            var canPromote = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanPromote);
-
-            Promote = ReactiveCommand.Create(() => SelectedItem.Promote(), canPromote);
-
-            var canDemote = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanDemote);
-
-            Demote = ReactiveCommand.Create(() => SelectedItem.Demote(), canDemote);
         }
 
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
+        public override void MoveUp()
+        {
+            this.Log().Debug("MoveUp {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
+        }
+
+        public override void MoveDown()
+        {
+            this.Log().Debug("MoveDown {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
+        }
+
+        public override void Demote()
+        {
+            this.Log().Debug("Demote {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
+        }
+
+        public override void Promote()
+        {
+            this.Log().Debug("Promote {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
+        }
     }
 
 
@@ -158,6 +207,22 @@ namespace OneMap.Controls
         public PageContentMindMapViewModel(string pageId, IPersistence persistence = null) : base(persistence)
         {
             // _persistence.LoadPageContents(pageId)
+        }
+
+        public override void MoveUp()
+        {
+        }
+
+        public override void MoveDown()
+        {
+        }
+
+        public override void Demote()
+        {
+        }
+
+        public override void Promote()
+        {
         }
     }
 }

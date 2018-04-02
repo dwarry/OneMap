@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +24,7 @@ namespace OneMap.Controls
     /// <summary>
     /// Interaction logic for HierarchyMindMap.xaml
     /// </summary>
-    public partial class HierarchyMindMap : UserControl, IViewFor<OneNoteHierarchyMindMapViewModel>
+    public partial class HierarchyMindMap : ReactiveUserControl<OneNoteHierarchyMindMapViewModel>
     {
         public HierarchyMindMap()
         {
@@ -47,25 +48,17 @@ namespace OneMap.Controls
 
             DataContext = ViewModel;
 
-            this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
+            this.WhenActivated(disposable =>
+            {
+                this.Bind(ViewModel, x => x.LeftSelection, x => x.LeftTree.SelectedItem);
+                this.Bind(ViewModel, x => x.RightSelection, x => x.RightTree.SelectedItem);
+                this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text).DisposeWith(disposable);
+
+            });
+
+
 
         }
 
-        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
-            "ViewModel", typeof(OneNoteHierarchyMindMapViewModel), typeof(HierarchyMindMap), new PropertyMetadata(default(OneNoteHierarchyMindMapViewModel)));
-
-
-        public OneNoteHierarchyMindMapViewModel ViewModel
-        {
-            get => (OneNoteHierarchyMindMapViewModel) GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
-        }
-
-
-        object IViewFor.ViewModel
-        {
-            get => ViewModel;
-            set => ViewModel = (OneNoteHierarchyMindMapViewModel)value;
-        }
     }
 }

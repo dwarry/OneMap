@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +30,11 @@ namespace OneMap
 
         private void InitializeLocator()
         {
+            var logger = new LogImpl() { Level = LogLevel.Debug};
+
+            logger.Write("Started Application", LogLevel.Info);
+
+            Locator.CurrentMutable.RegisterConstant(logger, typeof(ILogger));
 
             Locator.CurrentMutable.Register(() => new NotebookView(), typeof(IViewFor<NotebookTreeItem>));
             Locator.CurrentMutable.Register(() => new SectionGroupView(), typeof(IViewFor<SectionGroupTreeItem>));
@@ -40,6 +46,22 @@ namespace OneMap
             Locator.CurrentMutable.Register(() => new HierarchyMindMap(), typeof(IViewFor<OneNoteHierarchyMindMapViewModel>));
 
             Locator.CurrentMutable.Register(() => new OneNotePersistence(), typeof(IPersistence));
+
         }
+    }
+
+    public class LogImpl : ILogger
+    {
+        public void Write(string message, LogLevel logLevel)
+        {
+            if ((int)logLevel < (int)Level)
+            {
+                return;
+            }
+
+            Debug.WriteLine(message);
+        }
+
+        public LogLevel Level { get; set; }
     }
 }
