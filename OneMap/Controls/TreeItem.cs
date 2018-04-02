@@ -59,8 +59,8 @@ namespace OneMap.Controls
                 .Select(args => args.Item1 != null && args.Item2 > 0)
                 .ToProperty(this, x=>x.CanMoveUp, out _canMoveUp);
 
-            this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
-                .Select(args => args.Item1 != null && args.Item2 < args.Item1.Children.Count - 1)
+            this.WhenAnyValue<TreeItem, TreeItem, int, int>(x => x.Parent, x => x.Parent.Children.Count, x => x.Index)
+                .Select(args => args.Item1 != null && args.Item3 < args.Item2 - 1)
                 .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
 
             Observable.Return(false).ToProperty(this, x => x.CanPromote, out _canPromote);
@@ -153,6 +153,7 @@ namespace OneMap.Controls
 
         protected static Color DeriveForegroundColour(Color c)
         {
+            // A bit of trial and error to determine this value!
             const double threshold = 0.35;
 
             // from https://stackoverflow.com/questions/3116260/given-a-background-color-how-to-get-a-foreground-color-that-makes-it-readable-o
