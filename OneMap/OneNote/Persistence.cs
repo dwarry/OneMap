@@ -22,10 +22,13 @@ namespace OneMap.OneNote
         Page GetPage(string pageId);
 
 
-        Page GetCurrentPage();
+        string GetCurrentPageId();
 
 
         void UpdatePage(Page page);
+
+        void GotoPageOrItem(string pageId, string headingId = null);
+
     }
 
     public class OneNotePersistence : IPersistence
@@ -56,16 +59,42 @@ namespace OneMap.OneNote
 
         public Page GetPage(string pageId)
         {
-            return null;
+            _app.GetPageContent(pageId, out var xml, xsSchema: XMLSchema.xs2010);
+
+            return Read<Page>(xml);
         }
 
-        public Page GetCurrentPage()
+
+
+        public string GetCurrentPageId()
         {
-            return null;
+            foreach (Window w in _app.Windows)
+            {
+                if (!w.SideNote && w.CurrentPageId != null)
+                {
+                    return w.CurrentPageId;
+                }
+            }
+
+            return _app.Windows.CurrentWindow.CurrentPageId;
         }
 
         public void UpdatePage(Page page)
         {
+        }
+
+        public void GotoPageOrItem(string pageId, string headingId = null)
+        {
+            var window = _app.Windows.OfType<Window>().FirstOrDefault(w => !w.SideNote);
+
+            if (window != null)
+            {
+                window.NavigateTo(pageId, headingId);
+            }
+            else
+            {
+                _app.NavigateTo(pageId, headingId, true);
+            }
         }
     }
 }

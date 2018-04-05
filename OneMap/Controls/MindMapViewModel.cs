@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -69,29 +68,30 @@ namespace OneMap.Controls
                     settingSelectedItem = false;
                 }).DisposeWith(d);
 
+
+                var falseWhenNothingSelected =
+                    this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
+
+                this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
+                    .Log(this, "canMoveUp ")
+                    .ToProperty(this, x => x.CanMoveUp, out _canMoveUp)
+                    .DisposeWith(d);
+
+                this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
+                    .Log(this, "canMoveDown ")
+                    .ToProperty(this, x => x.CanMoveDown, out _canMoveDown)
+                    .DisposeWith(d);
+
+                this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
+                    .Log(this, "canPromote ")
+                    .ToProperty(this, x => x.CanPromote, out _canPromote)
+                    .DisposeWith(d);
+
+                this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
+                    .Log(this, "canDemote ")
+                    .ToProperty(this, x => x.CanDemote, out _canDemote)
+                    .DisposeWith(d);
             });
-
-           
-            var falseWhenNothingSelected =
-                this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
-
-            this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
-                .Log(this, "canMoveUp ")
-                .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
-
-            this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
-                .Log(this, "canMoveDown ")
-                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
-
-            this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
-                .Log(this, "canPromote ")
-                .ToProperty(this, x => x.CanPromote, out _canPromote);
-
-            this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
-                .Log(this, "canDemote ")
-                .ToProperty(this, x => x.CanDemote, out _canDemote);
-
-
 
         }
 
@@ -161,68 +161,14 @@ namespace OneMap.Controls
 
         public abstract void Promote();
 
+        private bool _isTabClosable;
+
+
+        public bool IsTabClosable
+        {
+            get { return _isTabClosable; }
+            set { this.RaiseAndSetIfChanged(ref _isTabClosable, value); }
+        }
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
-    }
-
-
-    public class OneNoteHierarchyMindMapViewModel : MindMapViewModel
-    {
-        public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null) : base(persistence)
-        {
-            Title = "Hierarchy";
-
-            var items = _persistence.LoadNotebooks();
-
-            var treeItems = items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
-
-            AllTreeItems.AddRange(treeItems);
-
-        }
-
-
-        public override void MoveUp()
-        {
-            this.Log().Debug("MoveUp {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
-        }
-
-        public override void MoveDown()
-        {
-            this.Log().Debug("MoveDown {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
-        }
-
-        public override void Demote()
-        {
-            this.Log().Debug("Demote {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
-        }
-
-        public override void Promote()
-        {
-            this.Log().Debug("Promote {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
-        }
-    }
-
-
-    public class PageContentMindMapViewModel : MindMapViewModel
-    {
-        public PageContentMindMapViewModel(string pageId, IPersistence persistence = null) : base(persistence)
-        {
-            // _persistence.LoadPageContents(pageId)
-        }
-
-        public override void MoveUp()
-        {
-        }
-
-        public override void MoveDown()
-        {
-        }
-
-        public override void Demote()
-        {
-        }
-
-        public override void Promote()
-        {
-        }
     }
 }

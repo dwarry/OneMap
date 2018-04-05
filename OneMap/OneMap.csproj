@@ -70,6 +70,9 @@
     <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-XAML.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -139,7 +142,9 @@
     <Compile Include="Controls\NotebookView.xaml.cs">
       <DependentUpon>NotebookView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OneNoteHierarchyMindMapViewModel.cs" />
     <Compile Include="Controls\OneNoteTreeItem.cs" />
+    <Compile Include="Controls\PageContentMindMapViewModel.cs" />
     <Compile Include="Controls\PageTreeItem.cs" />
     <Compile Include="Controls\PageView.xaml.cs">
       <DependentUpon>PageView.xaml</DependentUpon>

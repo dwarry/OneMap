@@ -63,6 +63,8 @@ namespace OneMap.Controls
                 .Select(args => args.Item1 != null && args.Item3 < args.Item2 - 1)
                 .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
 
+            this.WhenAnyValue(x => x.Parent).Select(x => x != null).ToProperty(this, x => x.CanDelete, out _canDelete);
+
             Observable.Return(false).ToProperty(this, x => x.CanPromote, out _canPromote);
 
             Observable.Return(false).ToProperty(this, x=> x.CanDemote, out _canDemote);
@@ -82,7 +84,7 @@ namespace OneMap.Controls
         public int Index
         {
             get => _index;
-            set { this.RaiseAndSetIfChanged(ref _index, value); }
+            protected set { this.RaiseAndSetIfChanged(ref _index, value); }
         }
 
 
@@ -104,6 +106,7 @@ namespace OneMap.Controls
         {
             child.Parent = this;
             Children.Add(child);
+            child.Index = Children.Count - 1;
         }
 
         public void ExpandPath()
@@ -119,37 +122,118 @@ namespace OneMap.Controls
         }
 
 
-        private ObservableAsPropertyHelper<bool> _canMoveUp;
+        protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
         public bool CanMoveUp => _canMoveUp.Value;
 
-        public virtual void MoveUp() { }
+        public virtual void MoveUp()
+        {
+            this.Parent.Children[this.Index - 1].Index = this.Index;
+            this.Parent.Children.RemoveAt(this.Index);
+            this.Parent.Children.Insert(this.Index - 1, this);
+            this.Index -= 1;
+        }
 
-        private ObservableAsPropertyHelper<bool> _canMoveDown;
+        protected ObservableAsPropertyHelper<bool> _canMoveDown;
 
         public bool CanMoveDown => _canMoveDown.Value;
 
         public virtual void MoveDown()
         {
+            this.Parent.Children[this.Index + 1].Index = this.Index;
+            this.Parent.Children.RemoveAt(this.Index);
+            this.Parent.Children.Insert(this.Index + 1, this);
+            this.Index += 1;
         }
 
 
-        private ObservableAsPropertyHelper<bool> _canPromote;
+        protected ObservableAsPropertyHelper<bool> _canPromote;
 
         public bool CanPromote => _canPromote.Value;
 
         public virtual void Promote()
         {
+            var (newParent, newIndex) = FindNewPromotionParent();
+
+            if (newParent == null) return;
+
+            Parent.Children.RemoveAt(Index);
+
+            newParent.Children.Insert(newIndex, this);
+
+            Parent = newParent;
+
+            Index = newIndex;
+
+            for(int i = newIndex; i < Parent.Children.Count; ++i)
+            {
+                newParent.Children[i].Index = i;
+            }
         }
 
-        private ObservableAsPropertyHelper<bool> _canDemote;
+        /// <summary>
+        /// By default, a promoted item will become the next sibling of its parent. 
+        /// </summary>
+        /// <returns></returns>
+        protected virtual (TreeItem newParent, int index) FindNewPromotionParent()
+        {
+            return (Parent.Parent, Parent.Index + 1);
+
+        }
+
+        protected ObservableAsPropertyHelper<bool> _canDemote;
 
         public bool CanDemote => _canDemote.Value;
-
+        
         public virtual void Demote()
         {
+            var newParent = FindNewDemotionParent();
+
+            if (newParent == null)
+            {
+                return;
+            }
+
+            Parent.Children.RemoveAt(Index);
+
+            newParent.AddChild(this);
+
+            Index = newParent.Children.Count - 1;
         }
 
+        protected ObservableAsPropertyHelper<bool> _canCreateChild;
+
+        public bool CanCreateChild => _canCreateChild.Value;
+
+        public void CreateChild(string title, ChildOption option)
+        {
+            var newChild = option.Factory(title, Children.Count - 1);
+            AddChild(newChild);
+        }
+
+        public virtual IReadOnlyCollection<ChildOption> ChildOptions => new ChildOption[];
+
+        protected virtual TreeItem FindNewDemotionParent()
+        {
+            // by default this will become a child of its preceding sibling
+            return Parent.Children[Index - 1];
+        }
+
+        protected ObservableAsPropertyHelper<bool> _canDelete;
+
+        public bool CanDelete => _canDelete.Value;
+
+        public virtual void Delete()
+        {
+            this.Parent.Children.RemoveAt(this.Index);
+
+            for (int i = this.Index; i < Parent.Children.Count; ++i)
+            {
+                this.Parent.Children[i].Index = i;
+            }
+
+            this.Parent = null;
+        }
 
         protected static Color DeriveForegroundColour(Color c)
         {
@@ -166,6 +250,24 @@ namespace OneMap.Controls
             return brightness > threshold ? Colors.Black : Colors.WhiteSmoke;
         }
 
+        
+    }
+
+
+    public class ChildOption
+    {
+        public string IconResourceName { get; }
+
+        public Func<string, int, TreeItem> Factory { get; }
+
+        public ChildOption(string title, string iconResourceName, Func<string, int, TreeItem> factory)
+        {
+            Title = title;
+            IconResourceName = iconResourceName;
+            Factory = factory;
+        }
+
+        public string Title { get; }
     }
 
 
