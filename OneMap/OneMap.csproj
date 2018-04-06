@@ -94,7 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\HierarchyMindMap.xaml">
+    <Page Include="Controls\OneNoteHierarchyMindMapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,8 +130,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\HierarchyMindMap.xaml.cs">
-      <DependentUpon>HierarchyMindMap.xaml</DependentUpon>
+    <Compile Include="Controls\OneNoteHierarchyMindMapView.xaml.cs">
+      <DependentUpon>OneNoteHierarchyMindMapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\LeftTree.xaml.cs">
       <DependentUpon>LeftTree.xaml</DependentUpon>

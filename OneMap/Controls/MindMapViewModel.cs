@@ -13,7 +13,7 @@ namespace OneMap.Controls
 
 
 
-    public abstract class MindMapViewModel : ReactiveObject, ISupportsActivation, IEnableLogger
+    public abstract class MindMapViewModel : ReactiveObject, IEnableLogger
     {
         protected readonly IPersistence _persistence;
 
@@ -40,58 +40,51 @@ namespace OneMap.Controls
 
             var settingSelectedItem = false;
 
-            this.WhenActivated(d =>
+            this.WhenAnyValue(x => x.LeftSelection).Subscribe(x =>
             {
-                this.WhenAnyValue(x => x.LeftSelection).Subscribe(x =>
-                {
-                    if (settingSelectedItem) return;
+                if (settingSelectedItem) return;
 
-                    settingSelectedItem = true;
+                settingSelectedItem = true;
 
-                    RightSelection = null;
+                RightSelection = null;
 
-                    SelectedItem = x;
+                SelectedItem = x;
 
-                    settingSelectedItem = false;
-                }).DisposeWith(d);
-
-                this.WhenAnyValue(x => x.RightSelection).Subscribe(x =>
-                {
-                    if (settingSelectedItem) return;
-
-                    settingSelectedItem = true;
-
-                    LeftSelection = null;
-
-                    SelectedItem = x;
-
-                    settingSelectedItem = false;
-                }).DisposeWith(d);
-
-
-                var falseWhenNothingSelected =
-                    this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
-
-                this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
-                    .Log(this, "canMoveUp ")
-                    .ToProperty(this, x => x.CanMoveUp, out _canMoveUp)
-                    .DisposeWith(d);
-
-                this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
-                    .Log(this, "canMoveDown ")
-                    .ToProperty(this, x => x.CanMoveDown, out _canMoveDown)
-                    .DisposeWith(d);
-
-                this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
-                    .Log(this, "canPromote ")
-                    .ToProperty(this, x => x.CanPromote, out _canPromote)
-                    .DisposeWith(d);
-
-                this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
-                    .Log(this, "canDemote ")
-                    .ToProperty(this, x => x.CanDemote, out _canDemote)
-                    .DisposeWith(d);
+                settingSelectedItem = false;
             });
+
+            this.WhenAnyValue(x => x.RightSelection).Subscribe(x =>
+            {
+                if (settingSelectedItem) return;
+
+                settingSelectedItem = true;
+
+                LeftSelection = null;
+
+                SelectedItem = x;
+
+                settingSelectedItem = false;
+            });
+
+
+            var falseWhenNothingSelected =
+                this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveUp ")
+                .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveDown ")
+                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
+                .Log(this, "canPromote ")
+                .ToProperty(this, x => x.CanPromote, out _canPromote);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
+                .Log(this, "canDemote ")
+                .ToProperty(this, x => x.CanDemote, out _canDemote);
 
         }
 
@@ -137,6 +130,8 @@ namespace OneMap.Controls
         public IReactiveDerivedList<TreeItem> RightTreeItems { get; }
 
 
+        public abstract void Refresh();
+
         protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
         public bool CanMoveUp => _canMoveUp.Value;
@@ -169,6 +164,5 @@ namespace OneMap.Controls
             get { return _isTabClosable; }
             set { this.RaiseAndSetIfChanged(ref _isTabClosable, value); }
         }
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
     }
 }

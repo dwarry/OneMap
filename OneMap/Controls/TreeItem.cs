@@ -19,7 +19,7 @@ namespace OneMap.Controls
         public bool IsExpanded
         {
             get => _isExpanded;
-            set { this.RaiseAndSetIfChanged(ref _isExpanded, value); }
+            set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
         }
 
 
@@ -29,7 +29,7 @@ namespace OneMap.Controls
         public bool IsSelected
         {
             get => _isSelected;
-            set { this.RaiseAndSetIfChanged(ref _isSelected, value); }
+            set => this.RaiseAndSetIfChanged(ref _isSelected, value);
         }
 
 
@@ -45,13 +45,14 @@ namespace OneMap.Controls
 
             this.WhenAnyValue(x => x.Index).Select(x => x > 0);
 
-            if (children == null) return;
-
-            using (Children.SuppressChangeNotifications())
+            if (children != null)
             {
-                foreach (var child in children)
+                using (Children.SuppressChangeNotifications())
                 {
-                    AddChild(child);
+                    foreach (var child in children)
+                    {
+                        AddChild(child);
+                    }
                 }
             }
 
@@ -75,7 +76,7 @@ namespace OneMap.Controls
         public string Title
         {
             get => _title;
-            set { this.RaiseAndSetIfChanged(ref _title, value); }
+            set => this.RaiseAndSetIfChanged(ref _title, value);
         }
 
 
@@ -84,7 +85,7 @@ namespace OneMap.Controls
         public int Index
         {
             get => _index;
-            protected set { this.RaiseAndSetIfChanged(ref _index, value); }
+            protected set => this.RaiseAndSetIfChanged(ref _index, value);
         }
 
 
@@ -211,7 +212,7 @@ namespace OneMap.Controls
             AddChild(newChild);
         }
 
-        public virtual IReadOnlyCollection<ChildOption> ChildOptions => new ChildOption[];
+        public virtual IReadOnlyCollection<ChildOption> ChildOptions => new ChildOption[0];
 
         protected virtual TreeItem FindNewDemotionParent()
         {

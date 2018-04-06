@@ -1,4 +1,4 @@
-﻿<reactiveUi:ReactiveUserControl x:TypeArguments="local:OneNoteHierarchyMindMapViewModel" x:Class="OneMap.Controls.HierarchyMindMap"
+﻿<reactiveUi:ReactiveUserControl x:TypeArguments="local:OneNoteHierarchyMindMapViewModel" x:Class="OneMap.Controls.OneNoteHierarchyMindMapView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -39,11 +39,11 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <local:LeftTree x:Name="LeftTree" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding ViewModel.LeftTreeItems}"></local:LeftTree>
+        <local:LeftTree x:Name="LeftTree" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding LeftTreeItems}"></local:LeftTree>
 
         <TextBlock x:Name="Title" Grid.Row="0" Grid.Column="1" FontSize="24" MaxWidth="250" VerticalAlignment="Center" TextWrapping="WrapWithOverflow">OneNote</TextBlock>
         
-        <local:RightTree x:Name="RightTree" Grid.Row="0" Grid.Column="2" ItemsSource="{Binding ViewModel.RightTreeItems}"></local:RightTree>
+        <local:RightTree x:Name="RightTree" Grid.Row="0" Grid.Column="2" ItemsSource="{Binding RightTreeItems}"></local:RightTree>
     </Grid>
 </reactiveUi:ReactiveUserControl>
 

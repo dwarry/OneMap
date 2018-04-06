@@ -127,7 +127,11 @@
 
         <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}">
             <TabControl.ItemTemplate>
-                <DataTemplate><TextBlock Text="{Binding Title}"></TextBlock></DataTemplate>
+                <DataTemplate>
+                    <mah:MetroTabItem Header="{Binding Title}">
+
+                    </mah:MetroTabItem>
+                </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="{x:Type controls:MindMapViewModel}">

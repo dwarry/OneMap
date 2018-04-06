@@ -22,22 +22,23 @@ namespace OneMap.Controls
             _pageId = pageId ?? persistence.GetCurrentPageId();
 
             IsTabClosable = true;
+        }
 
-            this.WhenActivated((CompositeDisposable d) =>
+        public override void Refresh()
+        {
+            var p = _persistence.GetPage(_pageId);
+
+            Title = GetTextContents(p.Title.OE);
+
+            _styles = ExtractStyles(p);
+
+            using (AllTreeItems.SuppressChangeNotifications())
             {
-                var p = _persistence.GetPage(pageId);
+                AllTreeItems.Clear();
 
-                Title = GetTextContents(p.Title.OE);
+                AllTreeItems.AddRange(GetHeadings(p));
+            }
 
-                _styles = ExtractStyles(p);
-
-                using (AllTreeItems.SuppressChangeNotifications())
-                {
-                    AllTreeItems.Clear();
-
-                    AllTreeItems.AddRange(GetHeadings(p));
-                }
-            });
         }
 
         private static string GetTextContents(OE oe)

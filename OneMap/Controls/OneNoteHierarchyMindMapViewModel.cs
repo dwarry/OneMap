@@ -15,23 +15,23 @@ namespace OneMap.Controls
         {
             Title = "Hierarchy";
 
-            this.WhenActivated((CompositeDisposable d) =>
-            {
-                var items = _persistence.LoadNotebooks();
-
-                var treeItems = items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
-
-                using (AllTreeItems.SuppressChangeNotifications())
-                {
-                    AllTreeItems.Clear();
-
-                    AllTreeItems.AddRange(treeItems);
-                }
-            });
-
             IsTabClosable = false;
         }
 
+        public override void Refresh()
+        {
+            var items = _persistence.LoadNotebooks();
+
+            var treeItems = items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
+
+            using (AllTreeItems.SuppressChangeNotifications())
+            {
+                AllTreeItems.Clear();
+
+                AllTreeItems.AddRange(treeItems);
+            }
+
+        }
 
         public override void MoveUp()
         {

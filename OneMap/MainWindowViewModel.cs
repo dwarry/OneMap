@@ -14,7 +14,7 @@ using Splat;
 
 namespace OneMap
 {
-    public class MainWindowViewModel: ReactiveObject, ISupportsActivation, IEnableLogger  
+    public class MainWindowViewModel: ReactiveObject, IEnableLogger  
     {
         public MainWindowViewModel()
         {
@@ -73,6 +73,5 @@ namespace OneMap
 
         public ReactiveCommand Demote { get; }
 
-        ViewModelActivator ISupportsActivation.Activator { get; } = new ViewModelActivator();
     }
 }
