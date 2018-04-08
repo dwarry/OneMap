@@ -30,7 +30,6 @@ namespace OneMap.Controls
         {
             InitializeComponent();
 
-
             ViewModel = Locator.Current.GetService<OneNoteHierarchyMindMapViewModel>();
 
             DataContext = ViewModel;
@@ -56,17 +55,20 @@ namespace OneMap.Controls
             this.WhenActivated(disposable =>
             {
                 ViewModel.Refresh();
-                this.Bind(ViewModel, x => x.LeftSelection, x => x.LeftTree.SelectedItem).DisposeWith(disposable);
-                this.Bind(ViewModel, x => x.RightSelection, x => x.RightTree.SelectedItem).DisposeWith(disposable);
+
+                this.WhenAnyValue(x => x.LeftTree.SelectedItem).BindTo(this, x => x.ViewModel.LeftSelection)
+                    .DisposeWith(disposable);
+
+                this.WhenAnyValue(x => x.RightTree.SelectedItem).BindTo(this, x => x.ViewModel.RightSelection)
+                    .DisposeWith(disposable);
+
                 this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text).DisposeWith(disposable);
-                //                this.OneWayBind(ViewModel, x => x.LeftTreeItems, x => x.LeftTree.ItemsSource).DisposeWith(disposable);
-                //                this.OneWayBind(ViewModel, x => x.RightTreeItems, x => x.RightTree.ItemsSource).DisposeWith(disposable);
+
                 LeftTree.ItemsSource = ViewModel.LeftTreeItems;
+
                 RightTree.ItemsSource = ViewModel.RightTreeItems;
 
             });
-
-
 
         }
 

@@ -46,7 +46,10 @@ namespace OneMap.Controls
 
                 settingSelectedItem = true;
 
-                RightSelection = null;
+                if (RightSelection != null)
+                {
+                    RightSelection.IsSelected = false;
+                }
 
                 SelectedItem = x;
 
@@ -59,7 +62,10 @@ namespace OneMap.Controls
 
                 settingSelectedItem = true;
 
-                LeftSelection = null;
+                if (LeftSelection != null)
+                {
+                    LeftSelection.IsSelected = false;
+                }
 
                 SelectedItem = x;
 
@@ -86,6 +92,9 @@ namespace OneMap.Controls
                 .Log(this, "canDemote ")
                 .ToProperty(this, x => x.CanDemote, out _canDemote);
 
+            this.WhenAnyValue(x => x.SelectedItem.CanViewPage).Merge(falseWhenNothingSelected)
+                .Log(this, "canViewPage")
+                .ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
         public MindMapViewModel ViewModel { get; }
@@ -155,6 +164,14 @@ namespace OneMap.Controls
         public bool CanPromote => _canPromote.Value;
 
         public abstract void Promote();
+
+
+        protected ObservableAsPropertyHelper<bool> _canViewPage;
+
+        public bool CanViewPage => _canViewPage.Value;
+
+        public abstract void ViewPage();
+
 
         private bool _isTabClosable;
 
