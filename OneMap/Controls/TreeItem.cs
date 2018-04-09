@@ -69,6 +69,8 @@ namespace OneMap.Controls
             Observable.Return(false).ToProperty(this, x => x.CanPromote, out _canPromote);
 
             Observable.Return(false).ToProperty(this, x=> x.CanDemote, out _canDemote);
+
+            Observable.Return(false).ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
         private string _title;
@@ -234,6 +236,16 @@ namespace OneMap.Controls
             }
 
             this.Parent = null;
+        }
+
+
+        protected ObservableAsPropertyHelper<bool> _canViewPage;
+
+        public bool CanViewPage => _canViewPage.Value;
+
+        public virtual void ViewPage()
+        {
+            throw new NotImplementedException();
         }
 
         protected static Color DeriveForegroundColour(Color c)

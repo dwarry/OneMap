@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 using OneMap.Controls;
 
@@ -47,6 +48,24 @@ namespace OneMap
             var canPromote = this.WhenAnyValue(x => x.SelectedTab.CanPromote).Merge(falseWhenNothingSelected);
 
             Promote = ReactiveCommand.Create(() => SelectedTab.Promote(), canPromote);
+
+            var canViewPage = this.WhenAnyValue(x => x.SelectedTab.CanViewPage).Merge(falseWhenNothingSelected);
+
+            ViewPage = ReactiveCommand.Create(OpenPageMindMap, canViewPage);
+        }
+
+        private void OpenPageMindMap()
+        {
+            var pti = (PageTreeItem) SelectedTab.SelectedItem.ViewModel;
+
+            var pageId = pti.PageId;
+
+            var pageMap = new PageContentMindMapViewModel(pageId, pti.Title);
+
+            Tabs.Add(pageMap);
+
+            SelectedTab = pageMap;
+
         }
 
         public void SelectFirstTab()
@@ -61,7 +80,10 @@ namespace OneMap
         public MindMapViewModel SelectedTab
         {
             get => _selectedTab;
-            set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
+            set {
+                this.Log().Debug("SelectedTab changed to: " + (value?.Title ?? "null" ));
+                this.RaiseAndSetIfChanged(ref _selectedTab, value);
+            }
         }
 
         
@@ -73,5 +95,6 @@ namespace OneMap
 
         public ReactiveCommand Demote { get; }
 
+        public ReactiveCommand ViewPage { get; }
     }
 }

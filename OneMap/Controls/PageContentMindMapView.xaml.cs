@@ -15,33 +15,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using ReactiveUI;
-using ReactiveUI.Events;
 
 using Splat;
 
 namespace OneMap.Controls
 {
     /// <summary>
-    /// Interaction logic for OneNoteHierarchyMindMapView.xaml
+    /// Interaction logic for PageContentMindMapView.xaml
     /// </summary>
-    public partial class OneNoteHierarchyMindMapView : ReactiveUserControl<OneNoteHierarchyMindMapViewModel>
+    public partial class PageContentMindMapView : ReactiveUserControl<PageContentMindMapViewModel>
     {
-        public OneNoteHierarchyMindMapView()
+        public PageContentMindMapView()
         {
             InitializeComponent();
-
-            ViewModel = Locator.Current.GetService<OneNoteHierarchyMindMapViewModel>();
-
-            DataContext = ViewModel;
-            LeftTree.ItemsSource = ViewModel.LeftTreeItems;
-            RightTree.ItemsSource = ViewModel.RightTreeItems;
 
             this.Events().Loaded.Subscribe(args =>
             {
                 var adornerLayer = AdornerLayer.GetAdornerLayer(LeftTree);
 
                 if (adornerLayer == null) return;
-
+                
                 var leftAdorner = new MindMapLinkAdorner(LeftTree, Title, true);
 
                 adornerLayer.Add(leftAdorner);
@@ -52,11 +45,10 @@ namespace OneMap.Controls
 
             });
 
-            DataContext = ViewModel;
-
             this.WhenActivated(disposable =>
             {
                 ViewModel.Refresh();
+
 
                 this.WhenAnyValue(x => x.LeftTree.SelectedItem).BindTo(this, x => x.ViewModel.LeftSelection)
                     .DisposeWith(disposable);
@@ -69,10 +61,8 @@ namespace OneMap.Controls
                 LeftTree.ItemsSource = ViewModel.LeftTreeItems;
 
                 RightTree.ItemsSource = ViewModel.RightTreeItems;
-
             });
 
         }
-
     }
 }

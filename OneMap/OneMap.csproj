@@ -94,6 +94,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\HeadingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OneNoteHierarchyMindMapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\NotebookView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PageContentMindMapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,6 +138,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviours\TabContent.cs" />
+    <Compile Include="Controls\HeadingTreeItem.cs" />
+    <Compile Include="Controls\HeadingView.xaml.cs">
+      <DependentUpon>HeadingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OneNoteHierarchyMindMapView.xaml.cs">
       <DependentUpon>OneNoteHierarchyMindMapView.xaml</DependentUpon>
     </Compile>
@@ -144,6 +157,9 @@
     </Compile>
     <Compile Include="Controls\OneNoteHierarchyMindMapViewModel.cs" />
     <Compile Include="Controls\OneNoteTreeItem.cs" />
+    <Compile Include="Controls\PageContentMindMapView.xaml.cs">
+      <DependentUpon>PageContentMindMapView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PageContentMindMapViewModel.cs" />
     <Compile Include="Controls\PageTreeItem.cs" />
     <Compile Include="Controls\PageView.xaml.cs">

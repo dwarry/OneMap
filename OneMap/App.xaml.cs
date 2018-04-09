@@ -25,7 +25,7 @@ namespace OneMap
         {
             PresentationTraceSources.Refresh();
             PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
-            PresentationTraceSources.DataBindingSource.Listeners.Add(new DebugTraceListener());
+//            PresentationTraceSources.DataBindingSource.Listeners.Add(new DebugTraceListener());
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
             base.OnStartup(e);
 
@@ -44,10 +44,11 @@ namespace OneMap
             Locator.CurrentMutable.Register(() => new SectionGroupView(), typeof(IViewFor<SectionGroupTreeItem>));
             Locator.CurrentMutable.Register(() => new SectionView(), typeof(IViewFor<SectionTreeItem>));
             Locator.CurrentMutable.Register(() => new PageView(), typeof(IViewFor<PageTreeItem>));
+            Locator.CurrentMutable.Register(() => new HeadingView(), typeof(IViewFor<HeadingTreeItem>));
 
             Locator.CurrentMutable.Register(() => new OneNoteHierarchyMindMapView(), typeof(IViewFor<OneNoteHierarchyMindMapViewModel>));
             Locator.CurrentMutable.Register(() => new OneNoteHierarchyMindMapViewModel(), typeof(OneNoteHierarchyMindMapViewModel));
-//            Locator.CurrentMutable.Register(() => new OneNoteHierarchyMindMapView(), typeof(IViewFor<OneNoteHierarchyMindMapViewModel>));
+            Locator.CurrentMutable.Register(() => new PageContentMindMapView(), typeof(IViewFor<PageContentMindMapViewModel>));
 
             Locator.CurrentMutable.Register(() => new OneNotePersistence(), typeof(IPersistence));
 

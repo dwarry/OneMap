@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:OneMap"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:reactiveUi="http://reactiveui.net"
+        xmlns:b="clr-namespace:OneMap.Behaviours"
         xmlns:controls="clr-namespace:OneMap.Controls"
-        mc:Ignorable="d"
+                 mc:Ignorable="d"
         Title="One Map" Height="450" Width="800">
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True" Margin="-1,7,1,-7">
         <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Orientation="Horizontal" Margin="4,4,4,4">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type Button}">
@@ -30,18 +31,18 @@
             </StackPanel.Resources>
             <Button x:Name="Demote">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                    <Viewbox Stretch="Uniform">
                         <Canvas Width="24" Height="24">
                             <Canvas.RenderTransform>
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                            <Path Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M11 17h10v-2H11v2zm-8-5l4 4V8l-4 4zm0 9h18v-2H3v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
                                 </Path.Data>
                             </Path>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                            <Path>
                                 <Path.Data>
                                     <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -53,18 +54,18 @@
             </Button>
             <Button x:Name="Promote">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Stretch="Uniform">
+                    <Viewbox Stretch="Uniform">
                         <Canvas Width="24" Height="24">
                             <Canvas.RenderTransform>
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                            <Path Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z" FillRule="NonZero"/>
                                 </Path.Data>
                             </Path>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" >
+                            <Path>
                                 <Path.Data>
                                     <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -106,14 +107,13 @@
                                 <TranslateTransform X="0" Y="0"/>
                             </Canvas.RenderTransform>
                             <Canvas.Resources/>
-                            <!--Unknown tag: metadata-->
-                            <!--Unknown tag: sodipodi:namedview-->
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                            <Path
+                                Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
                                 <Path.Data>
                                     <PathGeometry Figures="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" FillRule="NonZero"/>
                                 </Path.Data>
                             </Path>
-                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                            <Path>
                                 <Path.Data>
                                     <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
                                 </Path.Data>
@@ -123,24 +123,62 @@
                     <TextBlock>Down</TextBlock>
                 </StackPanel>
             </Button>
+            <Button x:Name="ViewPage">
+                <StackPanel>
+                    <Viewbox Stretch="Uniform">
+                        <Canvas Width="24" Height="24">
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="0"/>
+                            </Canvas.RenderTransform>
+                            <Canvas.Resources/>
+                            <Path>
+                                <Path.Data>
+                                    <PathGeometry Figures="M0 0h24v24H0z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                                <Path.Data>
+                                    <PathGeometry Figures="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Viewbox>
+
+                    <TextBlock>View</TextBlock>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
-        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}">
-            <TabControl.ItemTemplate>
+        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}" DisplayMemberPath="Title" b:TabContent.IsCached="True" >
+<!--            <mah:MetroTabControl.ItemContainerStyle>-->
+<!--                <Style TargetType="mah:MetroTabItem">-->
+<!--                    <Setter Property="Header" Value="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>-->
+<!--                    <Setter Property="CloseButtonEnabled" Value="{Binding IsTabClosable}"/>-->
+<!--                    <Setter Property="ContentTemplate" Value="{StaticResource contentTemplate}"/>-->
+<!--                </Style>-->
+<!--            </mah:MetroTabControl.ItemContainerStyle>-->
+            <b:TabContent.Template>
                 <DataTemplate>
-                    <mah:MetroTabItem Header="{Binding Title}">
-
-                    </mah:MetroTabItem>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate DataType="{x:Type controls:MindMapViewModel}">
                     <ScrollViewer>
                         <reactiveUi:ViewModelViewHost  ViewModel="{Binding ViewModel}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></reactiveUi:ViewModelViewHost>
                     </ScrollViewer>
                 </DataTemplate>
-            </TabControl.ContentTemplate>
+            </b:TabContent.Template>
         </TabControl>
     </DockPanel>
 </mah:MetroWindow>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

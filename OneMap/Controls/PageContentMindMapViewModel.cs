@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
 using OneMap.OneNote;
-
-using ReactiveUI;
 
 namespace OneMap.Controls
 {
@@ -17,11 +14,14 @@ namespace OneMap.Controls
         private readonly string _pageId;
         private IDictionary<string, QuickStyleDef> _styles;
 
-        public PageContentMindMapViewModel(string pageId, IPersistence persistence = null) : base(persistence)
+        public PageContentMindMapViewModel(string pageId, string title,  IPersistence persistence = null) : base(persistence)
         {
             _pageId = pageId ?? persistence.GetCurrentPageId();
 
+            Title = title;
+
             IsTabClosable = true;
+
         }
 
         public override void Refresh()
@@ -66,7 +66,9 @@ namespace OneMap.Controls
         private IEnumerable<HeadingTreeItem> GetHeadings(Page page)
         {
             Stack<HeadingTreeItem> headings = new Stack<HeadingTreeItem>();
-            
+
+            int topLevelIndex = 0;
+
             foreach (var outline in page.Items.OfType<Outline>())
             {
                 foreach (var oe in outline.OEChildren.SelectMany(x => x.Items.OfType<OE>()))
@@ -80,7 +82,9 @@ namespace OneMap.Controls
                         headings.Pop();
                     }
 
-                    var index = headings.Count == 0 ? AllTreeItems.Count : headings.Peek().Children.Count;
+                    var index = headings.Count == 0 
+                        ? topLevelIndex++ 
+                        : headings.Peek().Children.Count;
 
                     var newHeading = new HeadingTreeItem(index, _styles, oe);
 
@@ -91,6 +95,7 @@ namespace OneMap.Controls
                     }
                     else
                     {
+                        headings.Push(newHeading);
                         yield return newHeading;
                     }
 
@@ -127,38 +132,8 @@ namespace OneMap.Controls
         {
         }
 
-            
-    }
-
-    public class HeadingTreeItem : TreeItem
-    {
-        private readonly IDictionary<string, QuickStyleDef> _styleDefs;
-        private readonly OE _element;
-
-
-        public HeadingTreeItem(int index, IDictionary<string, QuickStyleDef> styleDefs, OE element): base(index)
+        public override void ViewPage()
         {
-            _styleDefs = styleDefs;
-            _element = element;
-
-            Title = element.OEChildren.OfType<TextRange>().FirstOrDefault()?.Value ?? "[Unknown title]";
-
-            this.WhenAnyValue(x => x.HeadingLevel)
-                .Select(x => x > 1)
-                .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
-
-            this.WhenAnyValue(x => x.HeadingLevel).Select(x => x < 6)
-                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
-        }
-
-
-        private int _headingLevel;
-
-
-        public int HeadingLevel
-        {
-            get { return _headingLevel; }
-            set { this.RaiseAndSetIfChanged(ref _headingLevel, value); }
         }
     }
 }

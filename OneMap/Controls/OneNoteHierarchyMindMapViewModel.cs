@@ -52,5 +52,9 @@ namespace OneMap.Controls
         {
             this.Log().Debug("Promote {0}({1})", SelectedItem.GetType().Name, SelectedItem.Title);
         }
+
+        public override void ViewPage()
+        {
+        }
     }
 }

@@ -3,14 +3,18 @@ using System.Windows;
 
 using MahApps.Metro.Controls;
 
+using OneMap.Controls;
+
 using ReactiveUI;
+
+using Splat;
 
 namespace OneMap
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow, IViewFor<MainWindowViewModel>
+    public partial class MainWindow : MetroWindow, IViewFor<MainWindowViewModel>, IEnableLogger
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
             "ViewModel", typeof(MainWindowViewModel), typeof(MainWindow),
@@ -24,7 +28,9 @@ namespace OneMap
 
             DataContext = ViewModel;
 
-            this.Bind(ViewModel, x => x.SelectedTab, x => x.Tabs.SelectedItem);
+        //    this.OneWayBind(ViewModel, x => x.Tabs, x => x.Tabs.ItemsSource);
+
+            this.Bind(ViewModel, x => x.SelectedTab, x => x.Tabs.SelectedItem, x => (object)x , x => x as MindMapViewModel);
 
             this.BindCommand(ViewModel, x => x.MoveUp, x => x.MoveUp);
 
@@ -34,8 +40,13 @@ namespace OneMap
 
             this.BindCommand(ViewModel, x => x.Demote, x => x.Demote);
 
+            this.BindCommand(ViewModel, x => x.ViewPage, x => x.ViewPage);
+
             this.Events().Loaded.Subscribe(x => { ViewModel.SelectFirstTab(); });
+
         }
+
+
 
 
         public MainWindowViewModel ViewModel
