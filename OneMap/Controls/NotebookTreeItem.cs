@@ -27,13 +27,12 @@ namespace OneMap.Controls
             Title = notebook.name;
 
             Color = (Color) ColorConverter.ConvertFromString(notebook.color ?? "#dddddd");
-
-            //MoveUp = MoveDown = Promote = Demote = DoNothing;
         }
 
         private static IEnumerable<TreeItem> MakeChildren(Notebook notebook)
         {
             int index = 0;
+
             foreach (var sg in notebook.SectionGroup ?? Enumerable.Empty<SectionGroup>())
             {
                 yield return new SectionGroupTreeItem(sg, index++);

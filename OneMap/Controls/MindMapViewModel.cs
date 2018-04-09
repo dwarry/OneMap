@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
 using OneMap.OneNote;
@@ -13,7 +13,7 @@ namespace OneMap.Controls
 
 
 
-    public class MindMapViewModel : ReactiveObject
+    public abstract class MindMapViewModel : ReactiveObject, IEnableLogger
     {
         protected readonly IPersistence _persistence;
 
@@ -28,6 +28,10 @@ namespace OneMap.Controls
 
         protected MindMapViewModel(IPersistence persistence = null)
         {
+            this.Log().Debug("Creating {0}", this.GetType().Name);
+
+            ViewModel = this;
+
             _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
 
             LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > (AllTreeItems.Count / 2) - 1);
@@ -42,7 +46,10 @@ namespace OneMap.Controls
 
                 settingSelectedItem = true;
 
-                RightSelection = null;
+                if (RightSelection != null)
+                {
+                    RightSelection.IsSelected = false;
+                }
 
                 SelectedItem = x;
 
@@ -55,14 +62,39 @@ namespace OneMap.Controls
 
                 settingSelectedItem = true;
 
-                LeftSelection = null;
+                if (LeftSelection != null)
+                {
+                    LeftSelection.IsSelected = false;
+                }
 
                 SelectedItem = x;
 
                 settingSelectedItem = false;
             });
 
-            ViewModel = this;
+
+            var falseWhenNothingSelected =
+                this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveUp ")
+                .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
+                .Log(this, "canMoveDown ")
+                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
+                .Log(this, "canPromote ")
+                .ToProperty(this, x => x.CanPromote, out _canPromote);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
+                .Log(this, "canDemote ")
+                .ToProperty(this, x => x.CanDemote, out _canDemote);
+
+            this.WhenAnyValue(x => x.SelectedItem.CanViewPage).Merge(falseWhenNothingSelected)
+                .Log(this, "canViewPage")
+                .ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
         public MindMapViewModel ViewModel { get; }
@@ -106,58 +138,48 @@ namespace OneMap.Controls
 
         public IReactiveDerivedList<TreeItem> RightTreeItems { get; }
 
-        public ReactiveCommand MoveUp { get; protected set; }
 
-        public ReactiveCommand MoveDown { get; protected set; }
+        public abstract void Refresh();
 
-        public ReactiveCommand Demote { get; protected set; }
+        protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
-        public ReactiveCommand Promote { get; protected set; }
-    }
+        public bool CanMoveUp => _canMoveUp.Value;
+
+        public abstract void MoveUp();
+
+        protected ObservableAsPropertyHelper<bool> _canMoveDown;
+
+        public bool CanMoveDown => _canMoveDown.Value;
+
+        public abstract void MoveDown();
+
+        protected ObservableAsPropertyHelper<bool> _canDemote;
+
+        public bool CanDemote => _canDemote.Value;
+
+        public abstract void Demote();
+
+        protected ObservableAsPropertyHelper<bool> _canPromote;
+
+        public bool CanPromote => _canPromote.Value;
+
+        public abstract void Promote();
 
 
-    public class OneNoteHierarchyMindMapViewModel : MindMapViewModel, ISupportsActivation
-    {
-        public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null) : base(persistence)
+        protected ObservableAsPropertyHelper<bool> _canViewPage;
+
+        public bool CanViewPage => _canViewPage.Value;
+
+        public abstract void ViewPage();
+
+
+        private bool _isTabClosable;
+
+
+        public bool IsTabClosable
         {
-            Title = "Hierarchy";
-
-            var items = _persistence.LoadNotebooks();
-
-            var treeItems = items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
-
-            AllTreeItems.AddRange(treeItems);
-
-            var canMoveUp = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanMoveUp);
-
-            MoveUp = ReactiveCommand.Create(() => SelectedItem.MoveUp(), canMoveUp);
-
-            var canMoveDown = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanMoveDown);
-
-            MoveDown = ReactiveCommand.Create(() => SelectedItem.MoveDown(), canMoveDown);
-
-            var canPromote = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanPromote);
-
-            Promote = ReactiveCommand.Create(() => SelectedItem.Promote(), canPromote);
-
-            var canDemote = this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => x != null && x.CanDemote);
-
-            Demote = ReactiveCommand.Create(() => SelectedItem.Demote(), canDemote);
-        }
-
-        public ViewModelActivator Activator { get; } = new ViewModelActivator();
-    }
-
-
-    public class PageContentMindMapViewModel : MindMapViewModel
-    {
-        public PageContentMindMapViewModel(string pageId, IPersistence persistence = null) : base(persistence)
-        {
-            // _persistence.LoadPageContents(pageId)
+            get { return _isTabClosable; }
+            set { this.RaiseAndSetIfChanged(ref _isTabClosable, value); }
         }
     }
 }

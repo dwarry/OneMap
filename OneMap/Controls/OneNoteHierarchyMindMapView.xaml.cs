@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,19 +22,25 @@ using Splat;
 namespace OneMap.Controls
 {
     /// <summary>
-    /// Interaction logic for HierarchyMindMap.xaml
+    /// Interaction logic for OneNoteHierarchyMindMapView.xaml
     /// </summary>
-    public partial class HierarchyMindMap : UserControl, IViewFor<OneNoteHierarchyMindMapViewModel>
+    public partial class OneNoteHierarchyMindMapView : ReactiveUserControl<OneNoteHierarchyMindMapViewModel>
     {
-        public HierarchyMindMap()
+        public OneNoteHierarchyMindMapView()
         {
             InitializeComponent();
 
             ViewModel = Locator.Current.GetService<OneNoteHierarchyMindMapViewModel>();
 
+            DataContext = ViewModel;
+            LeftTree.ItemsSource = ViewModel.LeftTreeItems;
+            RightTree.ItemsSource = ViewModel.RightTreeItems;
+
             this.Events().Loaded.Subscribe(args =>
             {
                 var adornerLayer = AdornerLayer.GetAdornerLayer(LeftTree);
+
+                if (adornerLayer == null) return;
 
                 var leftAdorner = new MindMapLinkAdorner(LeftTree, Title, true);
 
@@ -47,25 +54,25 @@ namespace OneMap.Controls
 
             DataContext = ViewModel;
 
-            this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
+            this.WhenActivated(disposable =>
+            {
+                ViewModel.Refresh();
+
+                this.WhenAnyValue(x => x.LeftTree.SelectedItem).BindTo(this, x => x.ViewModel.LeftSelection)
+                    .DisposeWith(disposable);
+
+                this.WhenAnyValue(x => x.RightTree.SelectedItem).BindTo(this, x => x.ViewModel.RightSelection)
+                    .DisposeWith(disposable);
+
+                this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text).DisposeWith(disposable);
+
+                LeftTree.ItemsSource = ViewModel.LeftTreeItems;
+
+                RightTree.ItemsSource = ViewModel.RightTreeItems;
+
+            });
 
         }
 
-        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
-            "ViewModel", typeof(OneNoteHierarchyMindMapViewModel), typeof(HierarchyMindMap), new PropertyMetadata(default(OneNoteHierarchyMindMapViewModel)));
-
-
-        public OneNoteHierarchyMindMapViewModel ViewModel
-        {
-            get => (OneNoteHierarchyMindMapViewModel) GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
-        }
-
-
-        object IViewFor.ViewModel
-        {
-            get => ViewModel;
-            set => ViewModel = (OneNoteHierarchyMindMapViewModel)value;
-        }
     }
 }
