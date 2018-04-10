@@ -13,7 +13,6 @@ namespace OneMap.Controls
 {
     public class PageContentMindMapViewModel : MindMapViewModel
     {
-        private static readonly Regex _simpleTagStripper = new Regex(@"^\<.+\>(.+)\</");
 
         public string PageId { get; }
 
@@ -45,29 +44,13 @@ namespace OneMap.Controls
         {
             var p = _persistence.GetPage(PageId);
 
-            Title = GetTextContents(p.Title.OE);
+            Title = p.Title.OE.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[No text]";;
 
             _styles = ExtractStyles(p);
 
             return GetHeadings(p);
         }
 
-        private static string GetTextContents(OE oe)
-        {
-            var t = oe.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[No text]";
-            
-            if (t.StartsWith("<"))
-            {
-                var m = _simpleTagStripper.Match(t);
-
-                if (m.Success)
-                {
-                    t = m.Groups[1].Value;
-                }
-            }
-
-            return t;
-        }
 
         private IDictionary<string, QuickStyleDef> ExtractStyles(Page p)
         {

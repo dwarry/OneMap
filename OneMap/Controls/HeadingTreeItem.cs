@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 
 using OneMap.OneNote;
 
@@ -19,7 +20,7 @@ namespace OneMap.Controls
             _styleDefs = styleDefs;
             _element = element;
 
-            Title = element.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[Unknown title]";
+            Title = GetTextContents(element);
 
             var qsd = styleDefs[element.quickStyleIndex];
 
@@ -47,6 +48,25 @@ namespace OneMap.Controls
         {
             get { return _headingLevel; }
             set { this.RaiseAndSetIfChanged(ref _headingLevel, value); }
+        }
+
+        private static readonly Regex _simpleTagStripper = new Regex(@"\>(.+)\</", RegexOptions.Compiled | RegexOptions.Multiline);
+
+        private static string GetTextContents(OE oe)
+        {
+            var t = oe.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[No text]";
+
+            if (t.StartsWith("<"))
+            {
+                var m = _simpleTagStripper.Match(t);
+
+                if (m.Success)
+                {
+                    t = m.Groups[1].Value;
+                }
+            }
+
+            return t;
         }
 
     }
