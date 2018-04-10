@@ -49,7 +49,5 @@ namespace OneMap.Controls
             set { this.RaiseAndSetIfChanged(ref _headingLevel, value); }
         }
 
-
-        public string Id => _element.objectID;
     }
 }
