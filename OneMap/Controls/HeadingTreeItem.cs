@@ -50,7 +50,7 @@ namespace OneMap.Controls
             set { this.RaiseAndSetIfChanged(ref _headingLevel, value); }
         }
 
-        private static readonly Regex _simpleTagStripper = new Regex(@"\>(.+)\</", RegexOptions.Compiled | RegexOptions.Multiline);
+        private static readonly Regex _simpleTagStripper = new Regex(@"\>(.+)\</", RegexOptions.Compiled);
 
         private static string GetTextContents(OE oe)
         {
