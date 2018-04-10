@@ -48,6 +48,7 @@ namespace OneMap.Controls
 
         public override void ViewPage()
         {
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -64,8 +65,6 @@ namespace OneMap.OneNote
             return Read<Page>(xml);
         }
 
-
-
         public string GetCurrentPageId()
         {
             foreach (Window w in _app.Windows)
@@ -85,16 +84,31 @@ namespace OneMap.OneNote
 
         public void GotoPageOrItem(string pageId, string headingId = null)
         {
-            var window = _app.Windows.OfType<Window>().FirstOrDefault(w => !w.SideNote);
+            Window window = null;
+            foreach (Window w in _app.Windows)
+            {
+                if (!w.SideNote)
+                {
+                    window = w;
+
+                    break;
+                }
+            }
+
+
 
             if (window != null)
             {
                 window.NavigateTo(pageId, headingId);
+                SetForegroundWindow((IntPtr)window.WindowHandle);
             }
             else
             {
                 _app.NavigateTo(pageId, headingId, true);
             }
         }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
     }
 }

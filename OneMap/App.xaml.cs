@@ -50,7 +50,7 @@ namespace OneMap
             Locator.CurrentMutable.Register(() => new OneNoteHierarchyMindMapViewModel(), typeof(OneNoteHierarchyMindMapViewModel));
             Locator.CurrentMutable.Register(() => new PageContentMindMapView(), typeof(IViewFor<PageContentMindMapViewModel>));
 
-            Locator.CurrentMutable.Register(() => new OneNotePersistence(), typeof(IPersistence));
+            Locator.CurrentMutable.RegisterConstant(new OneNotePersistence(), typeof(IPersistence));
 
         }
     }

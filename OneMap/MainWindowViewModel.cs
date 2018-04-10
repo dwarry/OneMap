@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 using OneMap.Controls;
+using OneMap.OneNote;
 
 using ReactiveUI;
 
@@ -17,8 +18,12 @@ namespace OneMap
 {
     public class MainWindowViewModel: ReactiveObject, IEnableLogger  
     {
-        public MainWindowViewModel()
+        private readonly IPersistence _persistence;
+
+        public MainWindowViewModel(IPersistence persistence = null)
         {
+            _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
+
             this.Log().Debug("Creating VM");
             
             var hierarchyVm = new OneNoteHierarchyMindMapViewModel();
@@ -56,15 +61,33 @@ namespace OneMap
 
         private void OpenPageMindMap()
         {
-            var pti = (PageTreeItem) SelectedTab.SelectedItem.ViewModel;
+            string pageId;
+            switch (SelectedTab.SelectedItem)
+            {
+                case PageTreeItem pti:
+                    pageId = pti.PageId;
 
-            var pageId = pti.PageId;
+                    var pageMap = new PageContentMindMapViewModel(pageId, pti.Title);
 
-            var pageMap = new PageContentMindMapViewModel(pageId, pti.Title);
+                    Tabs.Add(pageMap);
 
-            Tabs.Add(pageMap);
+                    SelectedTab = pageMap;
 
-            SelectedTab = pageMap;
+                    break;
+                case HeadingTreeItem hti:
+                    pageId = (SelectedTab as PageContentMindMapViewModel).PageId;
+                    var headingId = hti.Id;
+                    _persistence.GotoPageOrItem(pageId, headingId);
+                    break;
+
+                default:
+                    this.Log().Warn("Unexpected SelectedItem: " + (SelectedTab.SelectedItem == null ? "null" : SelectedTab.SelectedItem.ToString()));
+
+                    break;
+            }
+
+
+
 
         }
 

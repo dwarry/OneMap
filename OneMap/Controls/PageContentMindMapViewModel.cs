@@ -2,31 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
 using OneMap.OneNote;
+
+using ReactiveUI;
 
 namespace OneMap.Controls
 {
     public class PageContentMindMapViewModel : MindMapViewModel
     {
         private static readonly Regex _simpleTagStripper = new Regex(@"^\<.+\>(.+)\</");
-        private readonly string _pageId;
+
+        public string PageId { get; }
+
         private IDictionary<string, QuickStyleDef> _styles;
 
         public PageContentMindMapViewModel(string pageId, string title,  IPersistence persistence = null) : base(persistence)
         {
-            _pageId = pageId ?? persistence.GetCurrentPageId();
+            PageId = pageId ?? _persistence.GetCurrentPageId();
 
             Title = title;
 
             IsTabClosable = true;
 
+            var falseWhenNothingSelected =
+                this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
+
+//
+//            this.WhenAnyValue(x => x.SelectedItem as HeadingTreeItem)
+//                .Select(x => x.HeadingLevel > 1)
+//                .Merge(falseWhenNothingSelected)
+//                .ToProperty(this, x => x.Can)
+
+            this.WhenAnyValue(x => x.SelectedItem)
+                .Select(x => (x as HeadingTreeItem) != null)
+                .ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
         protected override IEnumerable<TreeItem> PrepareTreeItems()
         {
-            var p = _persistence.GetPage(_pageId);
+            var p = _persistence.GetPage(PageId);
 
             Title = GetTextContents(p.Title.OE);
 
@@ -128,6 +145,14 @@ namespace OneMap.Controls
 
         public override void ViewPage()
         {
+            string headingId = null;
+
+            if (SelectedItem is HeadingTreeItem h)
+            {
+                headingId = h.Id;
+            }
+
+            _persistence.GotoPageOrItem(PageId, headingId);
         }
     }
 }
