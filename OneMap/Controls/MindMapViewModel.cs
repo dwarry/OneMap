@@ -164,22 +164,26 @@ namespace OneMap.Controls
             {
                 AllTreeItems.Clear();
 
-                AllTreeItems.AddRange(PrepareTreeItems());
-            }
+                
 
-            _allItemsById.Clear();
+                _allItemsById.Clear();
 
-            foreach (var item in AllTreeItems)
-            {
-                ProcessTreeItem(item);
-            }
+                var newTreeItems = PrepareTreeItems().ToList();
 
-            foreach (var expandedItemId in expandedItems)
-            {
-                if (_allItemsById.TryGetValue(expandedItemId, out var item))
+                foreach (var item in newTreeItems)
                 {
-                    item.IsExpanded = true;
+                    ProcessTreeItem(item);
                 }
+
+                foreach (var expandedItemId in expandedItems)
+                {
+                    if (_allItemsById.TryGetValue(expandedItemId, out var item))
+                    {
+                        item.IsExpanded = true;
+                    }
+                }
+
+                AllTreeItems.AddRange(newTreeItems);
             }
         }
 
