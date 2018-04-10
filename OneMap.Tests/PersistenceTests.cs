@@ -27,6 +27,7 @@ namespace OneMap.Tests
             notebooks.Notebook.Should().NotBeEmpty("it should have found at least one Notebook");
         }
         
+        [Fact]
         public void CanParseHierarchyStructure()
         {
 

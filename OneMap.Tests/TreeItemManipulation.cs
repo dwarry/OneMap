@@ -181,7 +181,7 @@ namespace OneMap.Tests
         [DebuggerDisplay("TestTreeItem({Index})")]
         public class TestTreeItem : TreeItem
         {
-            public TestTreeItem(int index, params TestTreeItem[] children) : base(index, children)
+            public TestTreeItem(int index, params TestTreeItem[] children) : base(Guid.NewGuid().ToString(), index, children)
             {
 
             }
