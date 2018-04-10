@@ -120,16 +120,6 @@
     <TreeView.ItemsPanel>
         <ItemsPanelTemplate>
             <VirtualizingStackPanel VerticalAlignment="Center" />
-        </ItemsPanelTemplate>
+        </ItemsPanelTemplate> 
     </TreeView.ItemsPanel>
-    <!--<TreeView.ItemTemplate>
-            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-            <reactiveUi:ViewModelViewHost ></reactiveUi:ViewModelViewHost>
-                <HierarchicalDataTemplate.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Title}" />
-                    </DataTemplate>
-                </HierarchicalDataTemplate.ItemTemplate>
-            </HierarchicalDataTemplate>
-        </TreeView.ItemTemplate>-->
 </TreeView>
