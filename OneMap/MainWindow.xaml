@@ -159,7 +159,7 @@
 <!--            </mah:MetroTabControl.ItemContainerStyle>-->
             <b:TabContent.Template>
                 <DataTemplate>
-                    <ScrollViewer>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <reactiveUi:ViewModelViewHost  ViewModel="{Binding ViewModel}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></reactiveUi:ViewModelViewHost>
                     </ScrollViewer>
                 </DataTemplate>

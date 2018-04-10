@@ -116,6 +116,15 @@
         </HierarchicalDataTemplate>
 
     </TreeView.Resources>
+    <TreeView.Template>
+        <ControlTemplate TargetType="TreeView">
+            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    SnapsToDevicePixels="true">
+                <ItemsPresenter/>
+            </Border>
+        </ControlTemplate>
+    </TreeView.Template>
     <TreeView.ItemsPanel>
         <ItemsPanelTemplate>
             <VirtualizingStackPanel VerticalAlignment="Center" />
