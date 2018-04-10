@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -25,6 +28,11 @@ namespace OneMap.Controls
 
 
         private TreeItem _selectedItem;
+
+
+        protected IDictionary<string, TreeItem> _allItemsById = new Dictionary<string, TreeItem>();
+
+        private IList<string> _previouslyExpandedItems = new List<string>();
 
         protected MindMapViewModel(IPersistence persistence = null)
         {
@@ -129,7 +137,7 @@ namespace OneMap.Controls
             set => this.RaiseAndSetIfChanged(ref _rightSelection, value);
         }
 
-
+        
         public ReactiveList<TreeItem> AllTreeItems { get; } = new ReactiveList<TreeItem>();
 
 
@@ -138,8 +146,44 @@ namespace OneMap.Controls
 
         public IReactiveDerivedList<TreeItem> RightTreeItems { get; }
 
+        public void Refresh()
+        {
+            void ProcessTreeItem(TreeItem item)
+            {
+                _allItemsById.Add(item.Id, item);
 
-        public abstract void Refresh();
+                foreach (var child in item.Children)
+                {
+                    ProcessTreeItem(child);
+                }
+            }
+
+            var expandedItems = _allItemsById.Values.Where(x => x.IsExpanded).Select(x => x.Id).ToList();
+
+            using (AllTreeItems.SuppressChangeNotifications())
+            {
+                AllTreeItems.Clear();
+
+                AllTreeItems.AddRange(PrepareTreeItems());
+            }
+
+            _allItemsById.Clear();
+
+            foreach (var item in AllTreeItems)
+            {
+                ProcessTreeItem(item);
+            }
+
+            foreach (var expandedItemId in expandedItems)
+            {
+                if (_allItemsById.TryGetValue(expandedItemId, out var item))
+                {
+                    item.IsExpanded = true;
+                }
+            }
+        }
+
+        protected abstract IEnumerable<TreeItem> PrepareTreeItems();
 
         protected ObservableAsPropertyHelper<bool> _canMoveUp;
 

@@ -12,7 +12,7 @@ namespace OneMap.Controls
     {
         private readonly SectionGroup _sectionGroup;
 
-        public SectionGroupTreeItem(SectionGroup sectionGroup, int index): base(index, MakeChildren(sectionGroup))
+        public SectionGroupTreeItem(SectionGroup sectionGroup, int index): base(sectionGroup.ID, index, MakeChildren(sectionGroup))
         {
             _sectionGroup = sectionGroup ?? throw new ArgumentNullException(nameof(sectionGroup));
 

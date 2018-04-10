@@ -24,7 +24,7 @@ namespace OneMap.Controls
 
         }
 
-        public override void Refresh()
+        protected override IEnumerable<TreeItem> PrepareTreeItems()
         {
             var p = _persistence.GetPage(_pageId);
 
@@ -32,13 +32,7 @@ namespace OneMap.Controls
 
             _styles = ExtractStyles(p);
 
-            using (AllTreeItems.SuppressChangeNotifications())
-            {
-                AllTreeItems.Clear();
-
-                AllTreeItems.AddRange(GetHeadings(p));
-            }
-
+            return GetHeadings(p);
         }
 
         private static string GetTextContents(OE oe)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 
 using OneMap.OneNote;
@@ -18,19 +19,11 @@ namespace OneMap.Controls
             IsTabClosable = false;
         }
 
-        public override void Refresh()
+        protected override IEnumerable<TreeItem> PrepareTreeItems()
         {
             var items = _persistence.LoadNotebooks();
 
-            var treeItems = items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
-
-            using (AllTreeItems.SuppressChangeNotifications())
-            {
-                AllTreeItems.Clear();
-
-                AllTreeItems.AddRange(treeItems);
-            }
-
+            return items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
         }
 
         public override void MoveUp()

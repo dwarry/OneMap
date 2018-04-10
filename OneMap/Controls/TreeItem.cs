@@ -12,6 +12,7 @@ namespace OneMap.Controls
 {
     public abstract class TreeItem : ReactiveObject
     {
+        public string Id { get; }
 
         bool _isExpanded;
 
@@ -33,8 +34,9 @@ namespace OneMap.Controls
         }
 
 
-        protected TreeItem(int index, IEnumerable<TreeItem> children = null)
+        protected TreeItem(string id, int index, IEnumerable<TreeItem> children = null)
         {
+            Id = id ?? throw new ArgumentNullException(nameof(id));
             if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
 
             Children = new ReactiveList<TreeItem>();
@@ -281,14 +283,5 @@ namespace OneMap.Controls
         }
 
         public string Title { get; }
-    }
-
-
-    public class RootTreeItem : TreeItem
-    {
-        public RootTreeItem(IEnumerable<TreeItem> children = null): base(0, children)
-        {
-            Title = "OneNote";
-        }
     }
 }

@@ -17,7 +17,7 @@ namespace OneMap.Controls
     {
         private readonly Section _section;
 
-        public SectionTreeItem(Section section, int index): base(index, MakeChildren(section))
+        public SectionTreeItem(Section section, int index): base(section.ID, index, MakeChildren(section))
         {
             _section = section ?? throw new ArgumentNullException(nameof(section));
 

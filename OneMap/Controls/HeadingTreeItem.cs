@@ -14,7 +14,7 @@ namespace OneMap.Controls
         private readonly OE _element;
 
 
-        public HeadingTreeItem(int index, IDictionary<string, QuickStyleDef> styleDefs, OE element): base(index)
+        public HeadingTreeItem(int index, IDictionary<string, QuickStyleDef> styleDefs, OE element): base(element.objectID, index)
         {
             _styleDefs = styleDefs;
             _element = element;

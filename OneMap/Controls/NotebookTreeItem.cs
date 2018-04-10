@@ -18,7 +18,7 @@ namespace OneMap.Controls
     {
         private readonly Notebook _notebook;
 
-        public NotebookTreeItem(Notebook notebook, int index) : base(index, MakeChildren(notebook))
+        public NotebookTreeItem(Notebook notebook, int index) : base(notebook.ID, index, MakeChildren(notebook))
         {
             if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
 
