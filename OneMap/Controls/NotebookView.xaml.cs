@@ -33,7 +33,15 @@ namespace OneMap.Controls
             this.WhenActivated(d =>
             {
                 this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text).DisposeWith(d);
-                this.OneWayBind(ViewModel, x => x.Color, x => x.Background, c => new SolidColorBrush(c)).DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.ForegroundColor, x => x.Foreground, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BackgroundColor, x => x.Background, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BorderColor, x => x.Bd.BorderBrush, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
             });
 
         }
@@ -55,6 +63,6 @@ namespace OneMap.Controls
         }
 
 
-        //ViewModelActivator ISupportsActivation.Activator { get; } = new ViewModelActivator();
+//        ViewModelActivator ISupportsActivation.Activator { get; } = new ViewModelActivator();
     }
 }

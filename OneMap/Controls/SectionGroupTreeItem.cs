@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Media;
 
 using OneMap.OneNote;
 
@@ -17,6 +18,9 @@ namespace OneMap.Controls
             _sectionGroup = sectionGroup ?? throw new ArgumentNullException(nameof(sectionGroup));
 
             Title = sectionGroup.name;
+
+            BackgroundColor = Colors.DarkSlateGray;
+            ForegroundColor = BackgroundColor.DeriveForegroundColour();
 
         }
 

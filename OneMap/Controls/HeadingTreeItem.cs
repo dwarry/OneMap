@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 
 using OneMap.OneNote;
 
@@ -38,6 +39,9 @@ namespace OneMap.Controls
                 .ToProperty(this, x => x.CanDemote, out _canDemote);
 
             _canCreateChild = _canDemote;
+
+            BackgroundColor = Colors.Cyan;
+            
         }
 
 

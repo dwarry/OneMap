@@ -26,7 +26,8 @@ namespace OneMap.Controls
 
             Title = notebook.name;
 
-            Color = (Color) ColorConverter.ConvertFromString(notebook.color ?? "#dddddd");
+            BackgroundColor = (Color) ColorConverter.ConvertFromString(notebook.color ?? "#dddddd");
+            ForegroundColor = BackgroundColor.DeriveForegroundColour();
         }
 
         private static IEnumerable<TreeItem> MakeChildren(Notebook notebook)
@@ -42,15 +43,6 @@ namespace OneMap.Controls
             {
                 yield return new SectionTreeItem(s, index++);
             }
-        }
-
-        private Color _color;
-
-
-        public Color Color
-        {
-            get { return _color; }
-            set { this.RaiseAndSetIfChanged(ref _color, value); }
         }
 
 

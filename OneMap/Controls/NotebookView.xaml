@@ -7,20 +7,21 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 mc:Ignorable="d" 
                                 d:DesignHeight="30" d:DesignWidth="200">
+    <Border x:Name="Bd" BorderThickness="2" CornerRadius="2" Padding="2,2,2,2">
     <StackPanel Orientation="Horizontal" Margin="8,8,8,8">
         <Viewbox Stretch="Uniform">
-            <Canvas Name="svg1" Width="24" Height="24">
+            <Canvas Width="24" Height="24">
                 <Canvas.RenderTransform>
                     <TranslateTransform X="0" Y="0"/>
                 </Canvas.RenderTransform>
                 <Canvas.Resources/>
-                <Path Name="Path1" StrokeThickness="2" 
+                <Path StrokeThickness="2" 
                       Stroke="{Binding ElementName=Title,Path=Foreground}" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
                     <Path.Data>
                         <PathGeometry Figures="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" FillRule="NonZero"/>
                     </Path.Data>
                 </Path>
-                <Path Name="Path2" StrokeThickness="2" Stroke="{Binding ElementName=Title,Path=Foreground}" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                <Path StrokeThickness="2" Stroke="{Binding ElementName=Title,Path=Foreground}" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
                     <Path.Data>
                         <PathGeometry Figures="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" FillRule="NonZero"/>
                     </Path.Data>
@@ -28,5 +29,5 @@
             </Canvas>
         </Viewbox>
         <TextBlock x:Name="Title" FontSize="24" VerticalAlignment="Center">Title</TextBlock>
-    </StackPanel>
+    </StackPanel></Border>
 </UserControl>

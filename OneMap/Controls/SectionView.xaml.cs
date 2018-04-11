@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,9 +27,19 @@ namespace OneMap.Controls
         {
             InitializeComponent();
 
-            this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
-            this.OneWayBind(ViewModel, x => x.Color, x => x.Background, c => new SolidColorBrush(c));
-            this.OneWayBind(ViewModel, x => x.ForegroundColor, x => x.Foreground, c => new SolidColorBrush(c));
+            this.WhenActivated(d =>
+            {
+                this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
+
+                this.OneWayBind(ViewModel, x => x.ForegroundColor, x => x.Foreground, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BackgroundColor, x => x.Background, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BorderColor, x => x.Bd.BorderBrush, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+            });
 
         }
 
@@ -49,5 +60,6 @@ namespace OneMap.Controls
             get => ViewModel;
             set => ViewModel = (SectionTreeItem)value;
         }
+
     }
 }

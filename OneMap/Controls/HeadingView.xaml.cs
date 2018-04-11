@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +27,22 @@ namespace OneMap.Controls
         {
             InitializeComponent();
 
-            this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text);
+            this.WhenActivated(d =>
+            {
+
+                this.OneWayBind(ViewModel, x => x.Title, x => x.Title.Text)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.ForegroundColor, x => x.Foreground, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BackgroundColor, x => x.Background, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, x => x.BorderColor, x => x.Bd.BorderBrush, c => new SolidColorBrush(c))
+                    .DisposeWith(d);
+
+            });
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
@@ -35,8 +51,8 @@ namespace OneMap.Controls
 
         public HeadingTreeItem ViewModel
         {
-            get { return (HeadingTreeItem) GetValue(ViewModelProperty); }
-            set { SetValue(ViewModelProperty, value); }
+            get => (HeadingTreeItem) GetValue(ViewModelProperty);
+            set => SetValue(ViewModelProperty, value);
         }
 
         object IViewFor.ViewModel

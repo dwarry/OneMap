@@ -27,6 +27,7 @@ namespace OneMap.Controls
 
             Observable.Return(true).ToProperty(this, x => x.CanViewPage, out _canViewPage);
 
+        
         }
 
         private int _pageDepth;

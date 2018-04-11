@@ -24,12 +24,12 @@ namespace OneMap.Controls
             Title = section.name;
 
      
-            Color = (section.color ?? "").StartsWith("#")
+            BackgroundColor = (section.color ?? "").StartsWith("#")
                 ? (Color) ColorConverter.ConvertFromString(section.color ?? "#aaaaaa")
                 : Color.FromRgb(34,34,34);
 
+            ForegroundColor = BackgroundColor.DeriveForegroundColour();
 
-            this.WhenAnyValue(x => x.Color).Select(DeriveForegroundColour).ToProperty(this, x => x.ForegroundColor, out _foregroundColor);
         }
 
         private static IEnumerable<TreeItem> MakeChildren(Section section)
@@ -67,22 +67,5 @@ namespace OneMap.Controls
             }
         }
 
-        private Color _color;
-
-
-        public Color Color
-        {
-            get => _color;
-            set => this.RaiseAndSetIfChanged(ref _color, value);
-        }
-
-
-        private ObservableAsPropertyHelper<Color> _foregroundColor;
-
-
-        public Color ForegroundColor
-        {
-            get => _foregroundColor.Value;
-        }
     }
 }

@@ -58,6 +58,13 @@ namespace OneMap.Controls
                 }
             }
 
+            this.ForegroundColor = Colors.Black;
+            this.BackgroundColor = Colors.White;
+
+            this.WhenAnyValue(x => x.BackgroundColor, x => x.IsSelected)
+                .Select(args => GetBorderColor(args.Item1, args.Item2))
+                .ToProperty(this, x => x.BorderColor, out _borderColor);
+
             this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
                 .Select(args => args.Item1 != null && args.Item2 > 0)
                 .ToProperty(this, x=>x.CanMoveUp, out _canMoveUp);
@@ -73,6 +80,19 @@ namespace OneMap.Controls
             Observable.Return(false).ToProperty(this, x=> x.CanDemote, out _canDemote);
 
             Observable.Return(false).ToProperty(this, x => x.CanViewPage, out _canViewPage);
+        }
+
+        protected virtual Color GetBorderColor(Color background, bool isSelected)
+        {
+            if (!isSelected)
+            {
+                return BackgroundColor;
+            }
+
+            var average = (background.R + background.G + background.B) / 3;
+            var factor = average > 128 ? -0.5f : 0.5f;
+            return background.AdjustBrightness(factor);
+
         }
 
         private string _title;
@@ -250,22 +270,30 @@ namespace OneMap.Controls
             throw new NotImplementedException();
         }
 
-        protected static Color DeriveForegroundColour(Color c)
+
+        private Color _foregroundColor;
+
+
+        public Color ForegroundColor
         {
-            // A bit of trial and error to determine this value!
-            const double threshold = 0.35;
-
-            // from https://stackoverflow.com/questions/3116260/given-a-background-color-how-to-get-a-foreground-color-that-makes-it-readable-o
-            var r = Math.Pow(c.R / 255.0, 2.2);
-            var g = Math.Pow(c.G / 255.0, 2.2);
-            var b = Math.Pow(c.B / 255.0, 2.2);
-
-            var brightness = (0.2126 * r) + (0.7151 * g) + (0.0721 * b);
-
-            return brightness > threshold ? Colors.Black : Colors.WhiteSmoke;
+            get { return _foregroundColor; }
+            set { this.RaiseAndSetIfChanged(ref _foregroundColor, value); }
         }
 
-        
+
+        private Color _backgroundColor;
+
+
+        public Color BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set { this.RaiseAndSetIfChanged(ref _backgroundColor, value); }
+        }
+
+
+        private ObservableAsPropertyHelper<Color> _borderColor;
+
+        public Color BorderColor => _borderColor.Value;
     }
 
 

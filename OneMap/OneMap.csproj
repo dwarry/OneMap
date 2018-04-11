@@ -139,6 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviours\TabContent.cs" />
+    <Compile Include="ColorExtensions.cs" />
     <Compile Include="Controls\HeadingTreeItem.cs" />
     <Compile Include="Controls\HeadingView.xaml.cs">
       <DependentUpon>HeadingView.xaml</DependentUpon>
