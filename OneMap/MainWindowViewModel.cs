@@ -76,8 +76,18 @@ namespace OneMap
                     break;
                 case HeadingTreeItem hti:
                     pageId = (SelectedTab as PageContentMindMapViewModel).PageId;
+
                     var headingId = hti.Id;
+
                     _persistence.GotoPageOrItem(pageId, headingId);
+
+                    break;
+
+                case null when SelectedTab is PageContentMindMapViewModel pvm:
+                    pageId = pvm.PageId;
+
+                    _persistence.GotoPageOrItem(pageId);
+
                     break;
 
                 default:

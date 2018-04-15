@@ -14,8 +14,6 @@ using Splat;
 namespace OneMap.Controls
 {
 
-
-
     public abstract class MindMapViewModel : ReactiveObject, IEnableLogger
     {
         protected readonly IPersistence _persistence;

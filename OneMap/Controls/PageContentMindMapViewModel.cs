@@ -16,6 +16,8 @@ namespace OneMap.Controls
 
         public string PageId { get; }
 
+        private string _titleId;
+
         private IDictionary<string, QuickStyleDef> _styles;
 
         public PageContentMindMapViewModel(string pageId, string title,  IPersistence persistence = null) : base(persistence)
@@ -35,8 +37,7 @@ namespace OneMap.Controls
 //                .Merge(falseWhenNothingSelected)
 //                .ToProperty(this, x => x.Can)
 
-            this.WhenAnyValue(x => x.SelectedItem)
-                .Select(x => (x as HeadingTreeItem) != null)
+            Observable.Return(true)
                 .ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
@@ -45,6 +46,8 @@ namespace OneMap.Controls
             var p = _persistence.GetPage(PageId);
 
             Title = p.Title.OE.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[No text]";;
+
+            _titleId = p.Title.OE.objectID;
 
             _styles = ExtractStyles(p);
 
@@ -133,6 +136,10 @@ namespace OneMap.Controls
             if (SelectedItem is HeadingTreeItem h)
             {
                 headingId = h.Id;
+            }
+            else
+            {
+                headingId = _titleId;
             }
 
             _persistence.GotoPageOrItem(PageId, headingId);
