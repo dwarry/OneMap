@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace OneMap.Controls
 {
     public class MindMapLinkAdorner : Adorner
     {
-        private readonly TextBlock _mainLabel;
+        private const double ElbowRadius = 8.0;
+
         private readonly bool _isLeft;
+
+        private readonly Pen _linkPen = new Pen(new SolidColorBrush(Colors.DarkRed), 2.0);
+
+        private readonly TextBlock _mainLabel;
+
+        private readonly DispatcherTimer _redrawTimer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(50)};
 
         public MindMapLinkAdorner(TreeView adornedElement, TextBlock mainLabel, bool isLeft) : base(adornedElement)
         {
@@ -25,6 +30,14 @@ namespace OneMap.Controls
 
             adornedElement.AddHandler(TreeViewItem.ExpandedEvent,
                 new RoutedEventHandler(ExpandedChanged));
+
+            // If an item is added to the MindMap, and it doesn't have a size determined yet, 
+            // try again after a short delay. Ugly hack, but it works. 
+            _redrawTimer.Tick += (sender, args) =>
+            {
+                InvalidateVisual();
+                _redrawTimer.Stop();
+            };
         }
 
         private void ExpandedChanged(object sender, RoutedEventArgs args)
@@ -32,21 +45,32 @@ namespace OneMap.Controls
             InvalidateVisual();
         }
 
+        private void TreeViewItemIsLoadedChanged(object sender, RoutedEventArgs args)
+        {
+            var tvi = sender as TreeViewItem;
+            tvi.Loaded -= TreeViewItemIsLoadedChanged;
+            ((TreeView) AdornedElement).InvalidateVisual();
+        }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
-            var tv = (TreeView)AdornedElement;
+            var tv = (TreeView) AdornedElement;
 
-            foreach (var tvi in GetVisibleItems(tv))
-            {
-                DrawLink(drawingContext, tvi);
-            }
+            foreach (var tvi in GetVisibleItems(tv)) DrawLink(drawingContext, tvi);
         }
 
         private void DrawLink(DrawingContext drawingContext, TreeViewItem tvi)
         {
+            if (tvi.ActualHeight == 0.0)
+            {
+                _redrawTimer.Start();
+
+                return;
+            }
+
             var horizontalSegmentWidth = _isLeft ? -10.0 : 10.0;
 
-            UIElement parentElement = GetParent(tvi);
+            var parentElement = GetParent(tvi);
 
             var offsetItem = _isLeft ? 20.0 : 0.0;
             var offsetParent = !_isLeft ? 0.0 : 20.0;
@@ -55,20 +79,21 @@ namespace OneMap.Controls
                 tvi.ActualHeight / 2);
 
             var startPoint = tvi.TranslatePoint(point1,
-                                                AdornedElement);
+                AdornedElement);
 
             Point endPoint;
 
             if (_mainLabel == parentElement)
             {
                 var point2 = new Point(_isLeft ? 0.0 : parentElement.RenderSize.Width - offsetParent,
-                                   parentElement.RenderSize.Height / 2);
+                    parentElement.RenderSize.Height / 2);
+
                 endPoint = parentElement.TranslatePoint(point2, AdornedElement);
             }
             else
             {
-                TreeViewItem parentTvi = ((TreeViewItem)parentElement);
-                ContentPresenter hdr = (ContentPresenter)parentTvi.Template.FindName("PART_Header", parentTvi);
+                var parentTvi = (TreeViewItem) parentElement;
+                var hdr = (ContentPresenter) parentTvi.Template.FindName("PART_Header", parentTvi);
 
                 var point2 = new Point(_isLeft ? 0.0 : hdr.RenderSize.Width - offsetParent, hdr.RenderSize.Height / 2);
                 endPoint = hdr.TranslatePoint(point2, AdornedElement);
@@ -83,51 +108,35 @@ namespace OneMap.Controls
 
             while (ancestor != null)
             {
-                if (ancestor is TreeViewItem result)
-                {
-                    return result;
-                }
+                if (ancestor is TreeViewItem result) return result;
 
-                if (ancestor is TreeView)
-                {
-                    return _mainLabel;
-                }
+                if (ancestor is TreeView) return _mainLabel;
+
                 ancestor = VisualTreeHelper.GetParent(ancestor);
             }
 
             return _mainLabel;
         }
 
-        private readonly Pen _linkPen = new Pen(new SolidColorBrush(Colors.DarkRed), 2.0);
-
-        private const double ElbowRadius = 8.0;
-
         private IEnumerable<TreeViewItem> GetVisibleItems(FrameworkElement parent)
         {
             if (parent == null) yield break;
-            
+
             for (int i = 0, count = VisualTreeHelper.GetChildrenCount(parent); i < count; i++)
             {
-                FrameworkElement child = VisualTreeHelper.GetChild(parent, i) as FrameworkElement;
+                var child = VisualTreeHelper.GetChild(parent, i) as FrameworkElement;
 
                 if (child is TreeViewItem tvi)
                 {
                     yield return tvi;
 
                     if (tvi.IsExpanded)
-                    {
                         foreach (var childTvi in GetVisibleItems(tvi))
-                        {
                             yield return childTvi;
-                        }
-                    }
                 }
                 else
                 {
-                    foreach (var childTvi in GetVisibleItems(child))
-                    {
-                        yield return childTvi;
-                    }
+                    foreach (var childTvi in GetVisibleItems(child)) yield return childTvi;
                 }
             }
         }
@@ -142,12 +151,9 @@ namespace OneMap.Controls
                 var startX = tvi.ActualWidth - 8;
                 var startY = tvi.ActualHeight / 2;
 
-                var parentElement = (UIElement)tvi.Parent;
+                var parentElement = (UIElement) tvi.Parent;
 
-                if (parentElement is TreeView)
-                {
-                    parentElement = _mainLabel;
-                }
+                if (parentElement is TreeView) parentElement = _mainLabel;
 
                 var parentY = parentElement.TranslatePoint(new Point(0.0, parentElement.RenderSize.Height / 2), tvi);
 
@@ -171,9 +177,6 @@ namespace OneMap.Controls
 
                 drawingContext.DrawLine(stroke, parentHorizontalStart, parentY);
             }
-
         }
-
-
     }
 }
