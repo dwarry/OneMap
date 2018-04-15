@@ -149,14 +149,12 @@
             </Button>
         </StackPanel>
 
-        <TabControl x:Name="Tabs" ItemsSource="{Binding Tabs}" DisplayMemberPath="Title" b:TabContent.IsCached="True" >
-<!--            <mah:MetroTabControl.ItemContainerStyle>-->
-<!--                <Style TargetType="mah:MetroTabItem">-->
-<!--                    <Setter Property="Header" Value="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>-->
-<!--                    <Setter Property="CloseButtonEnabled" Value="{Binding IsTabClosable}"/>-->
-<!--                    <Setter Property="ContentTemplate" Value="{StaticResource contentTemplate}"/>-->
-<!--                </Style>-->
-<!--            </mah:MetroTabControl.ItemContainerStyle>-->
+        <mah:MetroTabControl x:Name="Tabs" ItemsSource="{Binding Tabs}" DisplayMemberPath="Title" b:TabContent.IsCached="True" >
+            <mah:MetroTabControl.Resources>
+                <Style TargetType="mah:MetroTabItem">
+                    <Setter Property="CloseButtonEnabled" Value="{Binding IsTabClosable}"></Setter>
+                </Style>
+            </mah:MetroTabControl.Resources>
             <b:TabContent.Template>
                 <DataTemplate>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -164,7 +162,7 @@
                     </ScrollViewer>
                 </DataTemplate>
             </b:TabContent.Template>
-        </TabControl>
+        </mah:MetroTabControl>
     </DockPanel>
 </mah:MetroWindow>
 
