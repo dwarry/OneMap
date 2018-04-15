@@ -67,7 +67,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <ToggleButton x:Name="Expander"
-                                          Style="{StaticResource ExpandCollapseToggleStyle}"
+                                          Style="{StaticResource MindMapExpandCollapseToggleStyle}"
                                           ClickMode="Press" Grid.Row="0" Grid.Column="2"
                                           IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
                                 <Control.RenderTransform>

@@ -17,8 +17,42 @@
                 <ResourceDictionary>
                     <Color x:Key="MindMapSelectedBackgroundColor" R="68" B="255" G="68"></Color>
                     <Color x:Key="MindMapSelectedUnfocusedColor" R="255" B="25" G="255"></Color>
+                    <Style x:Key="MindMapExpandCollapseToggleStyle" TargetType="ToggleButton">
+                        <Setter Property="Focusable" Value="False" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Grid Width="17" Height="15" Background="Transparent">
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup x:Name="CheckStates">
+                                                <VisualState x:Name="Checked">
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Collapsed">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="Expanded">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </VisualState>
+                                                <VisualState x:Name="Unchecked" />
+                                                <VisualState x:Name="Indeterminate" />
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+                                        <Path x:Name="Collapsed" Stroke="DarkRed" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1,1,1,1" StrokeThickness="2" Data="M 6,2 V 10 M 2,6 H 10 M 0,6 A 6,6 0 1 0 12,6 A 6,6 0 0 0 0,6">
+                                        </Path>
+                                        <Path x:Name="Expanded" Stroke="DarkRed" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1,1,1,1" StrokeThickness="2" Data="M 2,6 H 10 M 0,6 A 6,6 0 1 0 12,6 A 6,6 0 0 0 0,6" Visibility="Hidden">
+                                        </Path>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
+
+
+
