@@ -14,16 +14,19 @@ namespace OneMap.Controls
     {
         public OneNoteHierarchyMindMapViewModel(IPersistence persistence = null) : base(persistence)
         {
+            
             Title = "Hierarchy";
 
             IsTabClosable = false;
         }
 
-        protected override IEnumerable<TreeItem> PrepareTreeItems()
+        protected override TreeItem PrepareTreeItems()
         {
             var items = _persistence.LoadNotebooks();
 
-            return items.Notebook.Select((x, i) => new NotebookTreeItem(x, i));
+            var notebooks = items.Notebook.Select(x => new NotebookTreeItem(x));
+
+            return new OneNoteTreeItem(notebooks);
         }
 
         public override void MoveUp()

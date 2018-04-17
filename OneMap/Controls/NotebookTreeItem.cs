@@ -18,10 +18,8 @@ namespace OneMap.Controls
     {
         private readonly Notebook _notebook;
 
-        public NotebookTreeItem(Notebook notebook, int index) : base(notebook.ID, index, MakeChildren(notebook))
+        public NotebookTreeItem(Notebook notebook) : base(notebook.ID, MakeChildren(notebook))
         {
-            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
-
             _notebook = notebook ?? throw new ArgumentNullException(nameof(notebook));
 
             Title = notebook.name;
@@ -32,19 +30,16 @@ namespace OneMap.Controls
 
         private static IEnumerable<TreeItem> MakeChildren(Notebook notebook)
         {
-            int index = 0;
 
             foreach (var sg in notebook.SectionGroup ?? Enumerable.Empty<SectionGroup>())
             {
-                yield return new SectionGroupTreeItem(sg, index++);
+                yield return new SectionGroupTreeItem(sg);
             }
 
             foreach (var s in notebook.Section ?? Enumerable.Empty<Section>())
             {
-                yield return new SectionTreeItem(s, index++);
+                yield return new SectionTreeItem(s);
             }
         }
-
-
     }
 }

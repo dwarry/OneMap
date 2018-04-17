@@ -13,7 +13,7 @@ namespace OneMap.Controls
     {
         private readonly SectionGroup _sectionGroup;
 
-        public SectionGroupTreeItem(SectionGroup sectionGroup, int index): base(sectionGroup.ID, index, MakeChildren(sectionGroup))
+        public SectionGroupTreeItem(SectionGroup sectionGroup): base(sectionGroup.ID, MakeChildren(sectionGroup))
         {
             _sectionGroup = sectionGroup ?? throw new ArgumentNullException(nameof(sectionGroup));
 
@@ -26,16 +26,14 @@ namespace OneMap.Controls
 
         private static IEnumerable<TreeItem> MakeChildren(SectionGroup group)
         {
-            int index = 0;
-
             foreach (var sg in group.SectionGroup1 ?? Enumerable.Empty<SectionGroup>())
             {
-                yield return new SectionGroupTreeItem(sg, index++);
+                yield return new SectionGroupTreeItem(sg);
             }
 
             foreach (var s in group.Section ?? Enumerable.Empty<Section>())
             {
-                yield return new SectionTreeItem(s, index++);
+                yield return new SectionTreeItem(s);
             }
         }
 

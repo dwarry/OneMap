@@ -39,7 +39,7 @@ namespace OneMap.Tests
 
             var sectionGroupAndSectionCount = notebook.SectionGroup.Length + notebook.Section.Length;
 
-            var notebookTreeItem = new NotebookTreeItem(notebooks.Notebook[0], 0);
+            var notebookTreeItem = new NotebookTreeItem(notebooks.Notebook[0]);
 
             notebookTreeItem.Should().NotBeNull();
 

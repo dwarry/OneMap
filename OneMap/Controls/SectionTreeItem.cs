@@ -17,7 +17,7 @@ namespace OneMap.Controls
     {
         private readonly Section _section;
 
-        public SectionTreeItem(Section section, int index): base(section.ID, index, MakeChildren(section))
+        public SectionTreeItem(Section section): base(section.ID, MakeChildren(section))
         {
             _section = section ?? throw new ArgumentNullException(nameof(section));
 
@@ -34,12 +34,11 @@ namespace OneMap.Controls
 
         private static IEnumerable<TreeItem> MakeChildren(Section section)
         {
-            int index = 0;
             var nestedPages = new Stack<PageTreeItem>();
 
             foreach (var p in section.Page ?? Enumerable.Empty<Page>())
             {
-                var pti = new PageTreeItem(p, index++);
+                var pti = new PageTreeItem(p);
 
                 if (nestedPages.Count == 0 || pti.PageDepth == 1)
                 {

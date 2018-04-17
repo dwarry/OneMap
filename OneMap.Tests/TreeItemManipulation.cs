@@ -17,13 +17,13 @@ namespace OneMap.Tests
         [Fact]
         public void MovingAnItemUpPreservesIndexes()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
             
             child2.MoveUp();
@@ -43,13 +43,13 @@ namespace OneMap.Tests
         [Fact]
         public void MovingAnItemDownPreservesIndexes()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
 
             child2.MoveDown();
@@ -69,13 +69,13 @@ namespace OneMap.Tests
         [Fact]
         public void DeletingAnItemResetsIndexes()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
 
             child2.Delete();
@@ -96,13 +96,13 @@ namespace OneMap.Tests
         [Fact]
         public void FirstItemCannotMoveUpButSubsequentOnesCan()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
             child0.CanMoveUp.Should().BeFalse();
             child1.CanMoveUp.Should().BeTrue();
@@ -114,13 +114,13 @@ namespace OneMap.Tests
         [Fact]
         public void LastItemCannotMoveDownButSubsequentOnesCan()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
             child0.CanMoveDown.Should().BeTrue();
             child1.CanMoveDown.Should().BeTrue();
@@ -132,13 +132,13 @@ namespace OneMap.Tests
         [Fact]
         public void ItemsWithParentCanBeDeleted()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
             parent.CanDelete.Should().BeFalse();
             child0.CanDelete.Should().BeTrue();
@@ -151,13 +151,13 @@ namespace OneMap.Tests
         [Fact]
         public void MovingItemsResetsGuardProperties()
         {
-            var child0 = new TestTreeItem(0);
-            var child1 = new TestTreeItem(1);
-            var child2 = new TestTreeItem(2);
-            var child3 = new TestTreeItem(3);
-            var child4 = new TestTreeItem(4);
+            var child0 = new TestTreeItem();
+            var child1 = new TestTreeItem();
+            var child2 = new TestTreeItem();
+            var child3 = new TestTreeItem();
+            var child4 = new TestTreeItem();
 
-            var parent = new TestTreeItem(0, child0, child1, child2, child3, child4);
+            var parent = new TestTreeItem(child0, child1, child2, child3, child4);
 
             child0.CanMoveUp.Should().BeFalse();
             child1.CanMoveUp.Should().BeTrue();
@@ -181,7 +181,7 @@ namespace OneMap.Tests
         [DebuggerDisplay("TestTreeItem({Index})")]
         public class TestTreeItem : TreeItem
         {
-            public TestTreeItem(int index, params TestTreeItem[] children) : base(Guid.NewGuid().ToString(), index, children)
+            public TestTreeItem(params TestTreeItem[] children) : base(Guid.NewGuid().ToString(), children)
             {
 
             }

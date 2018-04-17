@@ -8,9 +8,9 @@ namespace OneMap.Controls
 {
     public class OneNoteTreeItem : TreeItem
     {
-        public OneNoteTreeItem(IEnumerable<NotebookTreeItem> notebooks) : base("OneNote", 0, notebooks)
+        public OneNoteTreeItem(IEnumerable<NotebookTreeItem> notebooks) : base("OneNote", notebooks)
         {
-            
+            Title = "OneNote";
         }
     }
 }

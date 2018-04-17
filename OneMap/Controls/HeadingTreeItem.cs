@@ -16,7 +16,7 @@ namespace OneMap.Controls
         private readonly OE _element;
 
 
-        public HeadingTreeItem(int index, IDictionary<string, QuickStyleDef> styleDefs, OE element): base(element.objectID, index)
+        public HeadingTreeItem(IDictionary<string, QuickStyleDef> styleDefs, OE element): base(element.objectID)
         {
             _styleDefs = styleDefs;
             _element = element;
@@ -30,20 +30,16 @@ namespace OneMap.Controls
                 HeadingLevel = int.Parse(qsd.name.Substring(1));
             }
 
-
-            this.WhenAnyValue(x => x.HeadingLevel)
-                .Select(x => x > 1)
-                .ToProperty(this, x => x.CanPromote, out _canPromote);
-
-            this.WhenAnyValue(x => x.HeadingLevel).Select(x => x < 6)
-                .ToProperty(this, x => x.CanDemote, out _canDemote);
-
-            _canCreateChild = _canDemote;
-
             BackgroundColor = Colors.Cyan;
-            
         }
 
+        public override bool CanPromote => HeadingLevel > 1;
+
+        public override bool CanDemote => HeadingLevel < 6;
+
+        public override bool CanViewPage => true;
+
+        public override bool CanCreateChild => HeadingLevel < 6;
 
         private int _headingLevel;
 

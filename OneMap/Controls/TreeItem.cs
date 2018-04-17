@@ -34,18 +34,13 @@ namespace OneMap.Controls
         }
 
 
-        protected TreeItem(string id, int index, IEnumerable<TreeItem> children = null)
+        protected TreeItem(string id, IEnumerable<TreeItem> children = null)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
-            if (index < 0) throw new ArgumentOutOfRangeException(nameof(index));
 
             Children = new ReactiveList<TreeItem>();
 
-            Index = index;
-
             ViewModel = this;
-
-            this.WhenAnyValue(x => x.Index).Select(x => x > 0);
 
             if (children != null)
             {
@@ -65,21 +60,6 @@ namespace OneMap.Controls
                 .Select(args => GetBorderColor(args.Item1, args.Item2))
                 .ToProperty(this, x => x.BorderColor, out _borderColor);
 
-            this.WhenAnyValue<TreeItem, TreeItem, int>(x => x.Parent, x => x.Index)
-                .Select(args => args.Item1 != null && args.Item2 > 0)
-                .ToProperty(this, x=>x.CanMoveUp, out _canMoveUp);
-
-            this.WhenAnyValue<TreeItem, TreeItem, int, int>(x => x.Parent, x => x.Parent.Children.Count, x => x.Index)
-                .Select(args => args.Item1 != null && args.Item3 < args.Item2 - 1)
-                .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
-
-            this.WhenAnyValue(x => x.Parent).Select(x => x != null).ToProperty(this, x => x.CanDelete, out _canDelete);
-
-            Observable.Return(false).ToProperty(this, x => x.CanPromote, out _canPromote);
-
-            Observable.Return(false).ToProperty(this, x=> x.CanDemote, out _canDemote);
-
-            Observable.Return(false).ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
         protected virtual Color GetBorderColor(Color background, bool isSelected)
@@ -104,12 +84,9 @@ namespace OneMap.Controls
         }
 
 
-        private int _index;
-
         public int Index
         {
-            get => _index;
-            protected set => this.RaiseAndSetIfChanged(ref _index, value);
+            get => Parent != null ? Parent.Children.IndexOf(this) : -1;
         }
 
 
@@ -131,7 +108,6 @@ namespace OneMap.Controls
         {
             child.Parent = this;
             Children.Add(child);
-            child.Index = Children.Count - 1;
         }
 
         public void ExpandPath()
@@ -147,34 +123,29 @@ namespace OneMap.Controls
         }
 
 
-        protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
-        public bool CanMoveUp => _canMoveUp.Value;
+
+        public virtual bool CanMoveUp => Index > 0;
 
         public virtual void MoveUp()
         {
-            this.Parent.Children[this.Index - 1].Index = this.Index;
-            this.Parent.Children.RemoveAt(this.Index);
-            this.Parent.Children.Insert(this.Index - 1, this);
-            this.Index -= 1;
+            int index = this.Index;
+
+            this.Parent.Children.RemoveAt(index);
+            this.Parent.Children.Insert(index - 1, this);
         }
 
-        protected ObservableAsPropertyHelper<bool> _canMoveDown;
-
-        public bool CanMoveDown => _canMoveDown.Value;
+        public virtual bool CanMoveDown => Parent != null && Index < Parent.Children.Count - 1;
 
         public virtual void MoveDown()
         {
-            this.Parent.Children[this.Index + 1].Index = this.Index;
-            this.Parent.Children.RemoveAt(this.Index);
-            this.Parent.Children.Insert(this.Index + 1, this);
-            this.Index += 1;
+            var index = this.Index;
+            this.Parent.Children.RemoveAt(index);
+            this.Parent.Children.Insert(index + 1, this);
         }
 
 
-        protected ObservableAsPropertyHelper<bool> _canPromote;
-
-        public bool CanPromote => _canPromote.Value;
+        public virtual bool CanPromote => false;
 
         public virtual void Promote()
         {
@@ -182,18 +153,13 @@ namespace OneMap.Controls
 
             if (newParent == null) return;
 
-            Parent.Children.RemoveAt(Index);
+            var index = this.Index;
+
+            Parent.Children.RemoveAt(index);
 
             newParent.Children.Insert(newIndex, this);
 
             Parent = newParent;
-
-            Index = newIndex;
-
-            for(int i = newIndex; i < Parent.Children.Count; ++i)
-            {
-                newParent.Children[i].Index = i;
-            }
         }
 
         /// <summary>
@@ -206,9 +172,7 @@ namespace OneMap.Controls
 
         }
 
-        protected ObservableAsPropertyHelper<bool> _canDemote;
-
-        public bool CanDemote => _canDemote.Value;
+        public virtual bool CanDemote => false;
         
         public virtual void Demote()
         {
@@ -222,13 +186,9 @@ namespace OneMap.Controls
             Parent.Children.RemoveAt(Index);
 
             newParent.AddChild(this);
-
-            Index = newParent.Children.Count - 1;
         }
 
-        protected ObservableAsPropertyHelper<bool> _canCreateChild;
-
-        public bool CanCreateChild => _canCreateChild.Value;
+        public virtual bool CanCreateChild => false;
 
         public void CreateChild(string title, ChildOption option)
         {
@@ -244,31 +204,18 @@ namespace OneMap.Controls
             return Parent.Children[Index - 1];
         }
 
-        protected ObservableAsPropertyHelper<bool> _canDelete;
 
-        public bool CanDelete => _canDelete.Value;
+        public virtual bool CanDelete => Parent != null;
 
         public virtual void Delete()
         {
             this.Parent.Children.RemoveAt(this.Index);
 
-            for (int i = this.Index; i < Parent.Children.Count; ++i)
-            {
-                this.Parent.Children[i].Index = i;
-            }
-
             this.Parent = null;
         }
 
 
-        protected ObservableAsPropertyHelper<bool> _canViewPage;
-
-        public bool CanViewPage => _canViewPage.Value;
-
-        public virtual void ViewPage()
-        {
-            throw new NotImplementedException();
-        }
+        public virtual bool CanViewPage => false;
 
 
         private Color _foregroundColor;

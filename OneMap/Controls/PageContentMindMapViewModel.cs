@@ -16,9 +16,7 @@ namespace OneMap.Controls
 
         public string PageId { get; }
 
-        private string _titleId;
 
-        private IDictionary<string, QuickStyleDef> _styles;
 
         public PageContentMindMapViewModel(string pageId, string title,  IPersistence persistence = null) : base(persistence)
         {
@@ -31,27 +29,21 @@ namespace OneMap.Controls
             var falseWhenNothingSelected =
                 this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
 
-//
-//            this.WhenAnyValue(x => x.SelectedItem as HeadingTreeItem)
-//                .Select(x => x.HeadingLevel > 1)
-//                .Merge(falseWhenNothingSelected)
-//                .ToProperty(this, x => x.Can)
-
-            Observable.Return(true)
-                .ToProperty(this, x => x.CanViewPage, out _canViewPage);
         }
 
-        protected override IEnumerable<TreeItem> PrepareTreeItems()
+        protected override TreeItem PrepareTreeItems()
         {
             var p = _persistence.GetPage(PageId);
+            
+            Title = p.Title.OE.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[Untitled Page]";;
 
-            Title = p.Title.OE.Items.OfType<TextRange>().FirstOrDefault()?.Value ?? "[No text]";;
+            var titleId = p.Title.OE.objectID;
 
-            _titleId = p.Title.OE.objectID;
+            var styles = ExtractStyles(p);
 
-            _styles = ExtractStyles(p);
+            var headings =  GetHeadings(p, styles);
 
-            return GetHeadings(p);
+            return new PageContentTreeItem(PageId, titleId, Title, headings);
         }
 
 
@@ -60,7 +52,7 @@ namespace OneMap.Controls
             return p.QuickStyleDef.ToDictionary(x => x.index);
         }
 
-        private IEnumerable<HeadingTreeItem> GetHeadings(Page page)
+        private IEnumerable<HeadingTreeItem> GetHeadings(Page page, IDictionary<string, QuickStyleDef> styles)
         {
             Stack<HeadingTreeItem> headings = new Stack<HeadingTreeItem>();
 
@@ -70,7 +62,7 @@ namespace OneMap.Controls
             {
                 foreach (var oe in outline.OEChildren.SelectMany(x => x.Items.OfType<OE>()))
                 {
-                    var level = GetLevel(oe.quickStyleIndex);
+                    var level = GetLevel(oe.quickStyleIndex, styles);
 
                     if (level == 0) continue;
 
@@ -83,7 +75,7 @@ namespace OneMap.Controls
                         ? topLevelIndex++ 
                         : headings.Peek().Children.Count;
 
-                    var newHeading = new HeadingTreeItem(index, _styles, oe);
+                    var newHeading = new HeadingTreeItem(styles, oe);
 
                     if (headings.Count != 0)
                     {
@@ -101,14 +93,14 @@ namespace OneMap.Controls
         }
 
 
-        private int GetLevel(string quickStyleIndex)
+        private int GetLevel(string quickStyleIndex, IDictionary<string, QuickStyleDef> styles)
         {
-            if (quickStyleIndex == null || !_styles.ContainsKey(quickStyleIndex))
+            if (quickStyleIndex == null || !styles.ContainsKey(quickStyleIndex))
             {
                 return 0;
             }
 
-            var style = _styles[quickStyleIndex];
+            var style = styles[quickStyleIndex];
 
             return style.name.StartsWith("h") ? int.Parse(style.name.Substring(1)) : 0;
         }
@@ -139,10 +131,34 @@ namespace OneMap.Controls
             }
             else
             {
-                headingId = _titleId;
+                headingId = RootTreeItem.Id;
             }
 
             _persistence.GotoPageOrItem(PageId, headingId);
         }
+    }
+
+
+    public class PageContentTreeItem : TreeItem
+    {
+        public string TitleId { get; }
+
+        public PageContentTreeItem(string id, string titleId, string title, IEnumerable<TreeItem> children = null) : base(id, children)
+        {
+            Title = title ?? "[Untitled page]";
+            TitleId = titleId;
+        }
+
+        public override bool CanMoveUp => false;
+
+        public override bool CanMoveDown => false;
+
+        public override bool CanPromote => false;
+
+        public override bool CanDemote => false;
+
+        public override bool CanDelete => false;
+
+        public override bool CanViewPage => true;
     }
 }

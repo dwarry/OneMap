@@ -36,8 +36,6 @@ namespace OneMap.Controls
         {
             this.Log().Debug("Creating {0}", this.GetType().Name);
 
-            ViewModel = this;
-
             _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
 
             LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > (AllTreeItems.Count / 2) - 1);
@@ -72,38 +70,54 @@ namespace OneMap.Controls
                 {
                     LeftSelection.IsSelected = false;
                 }
-
+    
                 SelectedItem = x;
 
                 settingSelectedItem = false;
             });
 
+            this.WhenAnyValue(x => x.RootTreeItem).Subscribe(x => RefreshCore() );
 
             var falseWhenNothingSelected =
                 this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
 
-            this.WhenAnyValue(x => x.SelectedItem.CanMoveUp).Merge(falseWhenNothingSelected)
+            var whenSelectedItemChanged = this.WhenAnyValue(x => x.SelectedItem).Where(x => x != null);
+
+
+            whenSelectedItemChanged.Select(x => x.CanMoveUp).Merge(falseWhenNothingSelected)
                 .Log(this, "canMoveUp ")
                 .ToProperty(this, x => x.CanMoveUp, out _canMoveUp);
 
-            this.WhenAnyValue(x => x.SelectedItem.CanMoveDown).Merge(falseWhenNothingSelected)
+            whenSelectedItemChanged.Select(x => x.CanMoveDown).Merge(falseWhenNothingSelected)
                 .Log(this, "canMoveDown ")
                 .ToProperty(this, x => x.CanMoveDown, out _canMoveDown);
 
-            this.WhenAnyValue(x => x.SelectedItem.CanPromote).Merge(falseWhenNothingSelected)
+            whenSelectedItemChanged.Select(x => x.CanPromote).Merge(falseWhenNothingSelected)
                 .Log(this, "canPromote ")
                 .ToProperty(this, x => x.CanPromote, out _canPromote);
 
-            this.WhenAnyValue(x => x.SelectedItem.CanDemote).Merge(falseWhenNothingSelected)
+            whenSelectedItemChanged.Select(x => x.CanDemote).Merge(falseWhenNothingSelected)
                 .Log(this, "canDemote ")
                 .ToProperty(this, x => x.CanDemote, out _canDemote);
 
-            this.WhenAnyValue(x => x.SelectedItem.CanViewPage).Merge(falseWhenNothingSelected)
+            whenSelectedItemChanged.Select(x => x.CanViewPage).Merge(falseWhenNothingSelected)
                 .Log(this, "canViewPage")
                 .ToProperty(this, x => x.CanViewPage, out _canViewPage);
+
+
         }
 
-        public MindMapViewModel ViewModel { get; }
+        public MindMapViewModel ViewModel => this;
+
+        private TreeItem _rootTreeItem;
+
+
+        public TreeItem RootTreeItem
+        {
+            get { return _rootTreeItem; }
+            set { this.RaiseAndSetIfChanged(ref _rootTreeItem, value); }
+        }
+
 
         private string _title;
 
@@ -146,8 +160,30 @@ namespace OneMap.Controls
 
         public void Refresh()
         {
+            var expandedItems = _allItemsById.Values.Where(x => x.IsExpanded).Select(x => x.Id).ToList();
+
+            RootTreeItem = PrepareTreeItems();
+
+            RefreshCore();
+
+            Title = RootTreeItem.Title;
+
+            foreach (var expandedItemId in expandedItems)
+            {
+                if (_allItemsById.TryGetValue(expandedItemId, out var item))
+                {
+                    item.IsExpanded = true;
+                }
+            }
+        }
+
+
+
+        protected virtual void RefreshCore()
+        {
             void ProcessTreeItem(TreeItem item)
             {
+                this.Log().Debug("Processing {0}({1}):{2}", item.GetType().Name, item.Title, item.Id);
                 _allItemsById.Add(item.Id, item);
 
                 foreach (var child in item.Children)
@@ -156,36 +192,25 @@ namespace OneMap.Controls
                 }
             }
 
-            var expandedItems = _allItemsById.Values.Where(x => x.IsExpanded).Select(x => x.Id).ToList();
-
             using (AllTreeItems.SuppressChangeNotifications())
             {
                 AllTreeItems.Clear();
 
-                
-
                 _allItemsById.Clear();
 
-                var newTreeItems = PrepareTreeItems().ToList();
-
-                foreach (var item in newTreeItems)
+                if (RootTreeItem == null)
                 {
-                    ProcessTreeItem(item);
+                    return;
+
                 }
 
-                foreach (var expandedItemId in expandedItems)
-                {
-                    if (_allItemsById.TryGetValue(expandedItemId, out var item))
-                    {
-                        item.IsExpanded = true;
-                    }
-                }
+                ProcessTreeItem(RootTreeItem);
 
-                AllTreeItems.AddRange(newTreeItems);
+                AllTreeItems.AddRange(RootTreeItem.Children);
             }
         }
 
-        protected abstract IEnumerable<TreeItem> PrepareTreeItems();
+        protected abstract TreeItem PrepareTreeItems();
 
         protected ObservableAsPropertyHelper<bool> _canMoveUp;
 
