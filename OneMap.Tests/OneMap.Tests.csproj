@@ -87,12 +87,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HierarchyManipulationTests.cs" />
     <Compile Include="PersistenceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyTests.cs" />
+    <Compile Include="Schemata.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Schemata.resx</DependentUpon>
+    </Compile>
     <Compile Include="TreeItemManipulation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="OneNote2010.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +116,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Schemata.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Schemata.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
