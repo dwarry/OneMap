@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HierarchyManipulationTests.cs" />
+    <Compile Include="OneNoteIntegrationTestFixture.cs" />
     <Compile Include="PersistenceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyTests.cs" />
