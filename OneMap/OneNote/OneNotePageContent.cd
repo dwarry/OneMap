@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OneMap.OneNote.Page">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="dateTimeField" Hidden="true" />
+      <Field Name="dateTimeFieldSpecified" Hidden="true" />
+      <Field Name="hasFutureContentField" Hidden="true" />
+      <Field Name="idField" Hidden="true" />
+      <Field Name="isCollapsedField" Hidden="true" />
+      <Field Name="isCurrentlyViewedField" Hidden="true" />
+      <Field Name="isIndexedField" Hidden="true" />
+      <Field Name="isInRecycleBinField" Hidden="true" />
+      <Field Name="isSubPageField" Hidden="true" />
+      <Field Name="isSubPageFieldSpecified" Hidden="true" />
+      <Field Name="isUnreadField" Hidden="true" />
+      <Field Name="isUnreadFieldSpecified" Hidden="true" />
+      <Field Name="itemsField" Hidden="true" />
+      <Field Name="langField" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="mediaPlaylistField" Hidden="true" />
+      <Field Name="metaField" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="pageLevelField" Hidden="true" />
+      <Field Name="pageSettingsField" Hidden="true" />
+      <Field Name="quickStyleDefField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="stationeryNameField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+      <Field Name="tagDefField" Hidden="true" />
+      <Field Name="titleField" Hidden="true" />
+      <Field Name="xPSFileField" Hidden="true" />
+    </Members>
+    <AssociationLine Name="Title" Type="OneMap.OneNote.Title" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.562" Y="0.5" />
+        <Point X="1.562" Y="0.125" />
+        <Point X="9.312" Y="0.125" />
+        <Point X="9.312" Y="0.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>gFSiAASBaMCAmUDAALQQ0CgCBAJEgLEABAEIxiRAACA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Title" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+      <Property Name="QuickStyleDef" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.PageObject">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="metaField" Hidden="true" />
+      <Field Name="objectIDField" Hidden="true" />
+      <Field Name="positionField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="sizeField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>wAACAAAAEEAAgAAgAAAAACgAAAAAAIAAFAAAggAAAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OneMap.OneNote.PageObjectTagable" Collapsed="true">
+    <Position X="3.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAIAAgAAAAAAAQAAAAACAAAQBAAAAAAAAAEAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OneMap.OneNote.Outline">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <Members>
+      <Field Name="authorField" Hidden="true" />
+      <Field Name="authorInitialsField" Hidden="true" />
+      <Field Name="creationTimeField" Hidden="true" />
+      <Field Name="creationTimeFieldSpecified" Hidden="true" />
+      <Field Name="indentsField" Hidden="true" />
+      <Field Name="langField" Hidden="true" />
+      <Field Name="lastModifiedByField" Hidden="true" />
+      <Field Name="lastModifiedByInitialsField" Hidden="true" />
+      <Field Name="oEChildrenField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AACAAgGFAAAAAAAAABAAAIQAiAAUgACAAAAQQAQUAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="OEChildren" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.OEChildren">
+    <Position X="9.25" Y="4" Width="1.5" />
+    <Members>
+      <Field Name="childOELayoutField" Hidden="true" />
+      <Field Name="indentField" Hidden="true" />
+      <Field Name="itemsField" Hidden="true" />
+      <Field Name="langField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AACAAACBEAAACAAABBAgACAAAACEgAAAAAAAAgQAAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OneMap.OneNote.QuickStyleDef">
+    <Position X="4.25" Y="5" Width="1.5" />
+    <Members>
+      <Field Name="boldField" Hidden="true" />
+      <Field Name="fontColorField" Hidden="true" />
+      <Field Name="fontField" Hidden="true" />
+      <Field Name="fontSizeField" Hidden="true" />
+      <Field Name="highlightColorField" Hidden="true" />
+      <Field Name="indexField" Hidden="true" />
+      <Field Name="italicField" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="spaceAfterField" Hidden="true" />
+      <Field Name="spaceBeforeField" Hidden="true" />
+      <Field Name="strikethroughField" Hidden="true" />
+      <Field Name="subscriptField" Hidden="true" />
+      <Field Name="superscriptField" Hidden="true" />
+      <Field Name="underlineField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAIAAQgEgACCgAADAMAoAABAICQEAAQAAJEAAAAhEAg=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OneMap.OneNote.OE">
+    <Position X="12" Y="3.75" Width="2.25" />
+    <Members>
+      <Field Name="alignmentField" Hidden="true" />
+      <Field Name="authorField" Hidden="true" />
+      <Field Name="authorInitialsField" Hidden="true" />
+      <Field Name="bodyTextField" Hidden="true" />
+      <Field Name="collapsedBodyTextField" Hidden="true" />
+      <Field Name="collapsedField" Hidden="true" />
+      <Field Name="creationTimeField" Hidden="true" />
+      <Field Name="creationTimeFieldSpecified" Hidden="true" />
+      <Field Name="itemsField" Hidden="true" />
+      <Field Name="langField" Hidden="true" />
+      <Field Name="lastModifiedByField" Hidden="true" />
+      <Field Name="lastModifiedByInitialsField" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="linkedNoteField" Hidden="true" />
+      <Field Name="listField" Hidden="true" />
+      <Field Name="mediaIndexField" Hidden="true" />
+      <Field Name="metaField" Hidden="true" />
+      <Field Name="objectIDField" Hidden="true" />
+      <Field Name="oEChildrenField" Hidden="true" />
+      <Field Name="outlookTaskField" Hidden="true" />
+      <Field Name="preserveTextContentField" Hidden="true" />
+      <Field Name="preserveTextContentFieldSpecified" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="rTLField" Hidden="true" />
+      <Field Name="rTLFieldSpecified" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="spaceAfterField" Hidden="true" />
+      <Field Name="spaceAfterFieldSpecified" Hidden="true" />
+      <Field Name="spaceBeforeField" Hidden="true" />
+      <Field Name="spaceBeforeFieldSpecified" Hidden="true" />
+      <Field Name="spaceBetweenField" Hidden="true" />
+      <Field Name="spaceBetweenFieldSpecified" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+      <Field Name="tag1Field" Hidden="true" />
+      <Field Name="tagField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>xACDAkmNIkAiCEAAABCQAOwkoOkcgYDBFQOQwgQUGII=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="OEChildren" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.Title">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="langField" Hidden="true" />
+      <Field Name="oeField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="showDateField" Hidden="true" />
+      <Field Name="showTimeField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+    </Members>
+    <AssociationLine Name="OE" Type="OneMap.OneNote.OE" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10" Y="1.75" />
+        <Point X="13.25" Y="1.75" />
+        <Point X="13.25" Y="3.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AACACACBAAAABAAAABAAACAAAAAEgAAAAQAAQgQBAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="OE" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.TextRange">
+    <Position X="9.25" Y="7.25" Width="1.75" />
+    <Members>
+      <Field Name="langField" Hidden="true" />
+      <Field Name="preserveWhiteSpaceField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+      <Field Name="valueField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AACAAAABAAAAAAAABBAAACAAAAAGgAAAAAAgAgQAAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OneMap.OneNote.Notebooks">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="notebookField" Hidden="true" />
+      <Field Name="openSectionsField" Hidden="true" />
+      <Field Name="unfiledNotesField" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAQACAAAAAAAAEBAAAAAAAAgAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Notebook" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.Notebook">
+    <Position X="2.75" Y="2.5" Width="2.25" />
+    <Members>
+      <Field Name="colorField" Hidden="true" />
+      <Field Name="idField" Hidden="true" />
+      <Field Name="isCurrentlyViewedField" Hidden="true" />
+      <Field Name="isInRecycleBinField" Hidden="true" />
+      <Field Name="isUnreadField" Hidden="true" />
+      <Field Name="isUnreadFieldSpecified" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="nicknameField" Hidden="true" />
+      <Field Name="pathField" Hidden="true" />
+      <Field Name="sectionField" Hidden="true" />
+      <Field Name="sectionGroupField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>hEACAAABIEAAgQAAAIRiEAgCAAAEACCAAAQAwIAAASA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Section" />
+      <Property Name="SectionGroup" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.Section">
+    <Position X="10" Y="1.75" Width="2.25" />
+    <Members>
+      <Field Name="areAllPagesAvailableField" Hidden="true" />
+      <Field Name="colorField" Hidden="true" />
+      <Field Name="encryptedField" Hidden="true" />
+      <Field Name="idField" Hidden="true" />
+      <Field Name="isCurrentlyViewedField" Hidden="true" />
+      <Field Name="isDeletedPagesField" Hidden="true" />
+      <Field Name="isInRecycleBinField" Hidden="true" />
+      <Field Name="isUnreadField" Hidden="true" />
+      <Field Name="isUnreadFieldSpecified" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="lockedField" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="pageField" Hidden="true" />
+      <Field Name="pathField" Hidden="true" />
+      <Field Name="readOnlyField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>hEACAAAAIEAQ4wQAIIUiEAgAAAAEACCAAAAIwACACGA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Page" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.SectionGroup">
+    <Position X="6.5" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="idField" Hidden="true" />
+      <Field Name="isCurrentlyViewedField" Hidden="true" />
+      <Field Name="isInRecycleBinField" Hidden="true" />
+      <Field Name="isRecycleBinField" Hidden="true" />
+      <Field Name="isUnreadField" Hidden="true" />
+      <Field Name="isUnreadFieldSpecified" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="pathField" Hidden="true" />
+      <Field Name="sectionField" Hidden="true" />
+      <Field Name="sectionGroup1Field" Hidden="true" />
+    </Members>
+    <AssociationLine Name="SectionGroup1" Type="OneMap.OneNote.SectionGroup">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.192" Y="0.373" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>hGACAAABMEAAgQAAAIQCEAgAAAAEASAAAAAAwIAAACA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Section" />
+      <Property Name="SectionGroup1" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OneMap.OneNote.Page">
+    <Position X="13.25" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="dateTimeField" Hidden="true" />
+      <Field Name="dateTimeFieldSpecified" Hidden="true" />
+      <Field Name="hasFutureContentField" Hidden="true" />
+      <Field Name="idField" Hidden="true" />
+      <Field Name="isCollapsedField" Hidden="true" />
+      <Field Name="isCurrentlyViewedField" Hidden="true" />
+      <Field Name="isIndexedField" Hidden="true" />
+      <Field Name="isInRecycleBinField" Hidden="true" />
+      <Field Name="isSubPageField" Hidden="true" />
+      <Field Name="isSubPageFieldSpecified" Hidden="true" />
+      <Field Name="isUnreadField" Hidden="true" />
+      <Field Name="isUnreadFieldSpecified" Hidden="true" />
+      <Field Name="itemsField" Hidden="true" />
+      <Field Name="langField" Hidden="true" />
+      <Field Name="lastModifiedTimeField" Hidden="true" />
+      <Field Name="lastModifiedTimeFieldSpecified" Hidden="true" />
+      <Field Name="mediaPlaylistField" Hidden="true" />
+      <Field Name="metaField" Hidden="true" />
+      <Field Name="nameField" Hidden="true" />
+      <Field Name="pageLevelField" Hidden="true" />
+      <Field Name="pageSettingsField" Hidden="true" />
+      <Field Name="quickStyleDefField" Hidden="true" />
+      <Field Name="quickStyleIndexField" Hidden="true" />
+      <Field Name="selectedField" Hidden="true" />
+      <Field Name="stationeryNameField" Hidden="true" />
+      <Field Name="styleField" Hidden="true" />
+      <Field Name="tagDefField" Hidden="true" />
+      <Field Name="titleField" Hidden="true" />
+      <Field Name="xPSFileField" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>gFSiAASBaMCAmUDAALQQ0CgCBAJEgLEABAEIxiRAACA=</HashCode>
+      <FileName>OneNote\OneNote2010.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
