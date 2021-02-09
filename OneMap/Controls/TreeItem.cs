@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace OneMap.Controls
@@ -38,13 +38,12 @@ namespace OneMap.Controls
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
 
-            Children = new ReactiveList<TreeItem>();
 
             ViewModel = this;
 
             if (children != null)
             {
-                using (Children.SuppressChangeNotifications())
+                using (Children.SuspendNotifications())
                 {
                     foreach (var child in children)
                     {
@@ -100,7 +99,7 @@ namespace OneMap.Controls
         }
 
 
-        public ReactiveList<TreeItem> Children { get; }
+        public ObservableCollectionExtended<TreeItem> Children { get; } = new ObservableCollectionExtended<TreeItem>();
 
         public object ViewModel { get; }
 
@@ -151,7 +150,7 @@ namespace OneMap.Controls
         {
             var (newParent, newIndex) = FindNewPromotionParent();
 
-            if (newParent == null) return;
+            if (newParent == null) { return; }
 
             var index = this.Index;
 
@@ -173,7 +172,7 @@ namespace OneMap.Controls
         }
 
         public virtual bool CanDemote => false;
-        
+
         public virtual void Demote()
         {
             var newParent = FindNewDemotionParent();

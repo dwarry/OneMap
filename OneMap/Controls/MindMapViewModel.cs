@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-
+using DynamicData;
+using DynamicData.Binding;
 using OneMap.OneNote;
 
 using ReactiveUI;
@@ -38,15 +40,18 @@ namespace OneMap.Controls
 
             _persistence = persistence ?? Locator.Current.GetService<IPersistence>();
 
-            LeftTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index > (AllTreeItems.Count / 2) - 1);
+            AllTreeItems.ToObservableChangeSet().Filter(x => x.Index > (AllTreeItems.Count / 2) - 1).Bind(out _leftTreeItems).Subscribe();
 
-            RightTreeItems = AllTreeItems.CreateDerivedCollection(x => x, x => x.Index <= (AllTreeItems.Count / 2) - 1);
+            AllTreeItems.ToObservableChangeSet().Filter(x => x.Index <= (AllTreeItems.Count / 2) - 1).Bind(out _rightTreeItems).Subscribe();
 
             var settingSelectedItem = false;
 
             this.WhenAnyValue(x => x.LeftSelection).Subscribe(x =>
             {
-                if (settingSelectedItem) return;
+                if (settingSelectedItem)
+                {
+                    return;
+                }
 
                 settingSelectedItem = true;
 
@@ -62,7 +67,10 @@ namespace OneMap.Controls
 
             this.WhenAnyValue(x => x.RightSelection).Subscribe(x =>
             {
-                if (settingSelectedItem) return;
+                if (settingSelectedItem)
+                {
+                    return;
+                }
 
                 settingSelectedItem = true;
 
@@ -70,13 +78,13 @@ namespace OneMap.Controls
                 {
                     LeftSelection.IsSelected = false;
                 }
-    
+
                 SelectedItem = x;
 
                 settingSelectedItem = false;
             });
 
-            this.WhenAnyValue(x => x.RootTreeItem).Subscribe(x => RefreshCore() );
+            this.WhenAnyValue(x => x.RootTreeItem).Subscribe(x => RefreshCore());
 
             var falseWhenNothingSelected =
                 this.WhenAnyValue(x => x.SelectedItem).Where(x => x == null).Select(x => false);
@@ -149,14 +157,14 @@ namespace OneMap.Controls
             set => this.RaiseAndSetIfChanged(ref _rightSelection, value);
         }
 
-        
-        public ReactiveList<TreeItem> AllTreeItems { get; } = new ReactiveList<TreeItem>();
+
+        public ObservableCollectionExtended<TreeItem> AllTreeItems { get; } = new ObservableCollectionExtended<TreeItem>();
 
 
-        public IReactiveDerivedList<TreeItem> LeftTreeItems { get; }
+        public ReadOnlyObservableCollection<TreeItem> LeftTreeItems => _leftTreeItems;
 
 
-        public IReactiveDerivedList<TreeItem> RightTreeItems { get; }
+        public ReadOnlyObservableCollection<TreeItem> RightTreeItems => _rightTreeItems;
 
         public void Refresh()
         {
@@ -192,7 +200,7 @@ namespace OneMap.Controls
                 }
             }
 
-            using (AllTreeItems.SuppressChangeNotifications())
+            using (AllTreeItems.SuspendNotifications())
             {
                 AllTreeItems.Clear();
 
@@ -245,7 +253,8 @@ namespace OneMap.Controls
 
 
         private bool _isTabClosable;
-
+        private ReadOnlyObservableCollection<TreeItem> _leftTreeItems;
+        private ReadOnlyObservableCollection<TreeItem> _rightTreeItems;
 
         public bool IsTabClosable
         {

@@ -37,7 +37,7 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
                                                                               Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                                     <EasingColorKeyFrame KeyTime="0"
-                                                                         Value="{StaticResource WhiteColor}" />
+                                                                         Value="{StaticResource MindMapSelectedBackgroundColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>
@@ -47,7 +47,7 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
                                                                               Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                                      <EasingColorKeyFrame KeyTime="0"
-                                                                         Value="{StaticResource Gray3}" />
+                                                                         Value="{StaticResource MindMapSelectedUnfocusedColor}" />
                                                 </ColorAnimationUsingKeyFrames>
                                             </Storyboard>
                                         </VisualState>

@@ -26,7 +26,7 @@ namespace OneMap.Tests
 
             notebooks.Notebook.Should().NotBeEmpty("it should have found at least one Notebook");
         }
-        
+
         [Fact]
         public void CanParseHierarchyStructure()
         {
@@ -46,8 +46,8 @@ namespace OneMap.Tests
             notebookTreeItem.Children.Should().HaveCount(sectionGroupAndSectionCount);
         }
 
-        private const string TestPageId = 
-            "{86FA7219-6A4D-4097-8794-DB707FD4FF64}{1}{E19463292488496448914020138626881715776150231}";
+        private const string TestPageId = "{21BAD9B9-BE9E-0A21-2CDE-DE5A5E68D484}{1}{E187919655180231383241923265548572506132521}";
+
 
         [Fact]
         public void CanRetrievePage()

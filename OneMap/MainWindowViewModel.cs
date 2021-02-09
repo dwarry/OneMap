@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+using DynamicData.Binding;
 using OneMap.Controls;
 using OneMap.OneNote;
 
@@ -106,7 +106,7 @@ namespace OneMap
             SelectedTab = Tabs[0];
         }
 
-        public ReactiveList<MindMapViewModel> Tabs { get; } = new ReactiveList<MindMapViewModel>();
+        public ObservableCollectionExtended<MindMapViewModel> Tabs { get; } = new ObservableCollectionExtended<MindMapViewModel>();
 
         private MindMapViewModel _selectedTab;
 
@@ -120,14 +120,14 @@ namespace OneMap
         }
 
         
-        public ReactiveCommand MoveUp { get; }
+        public ReactiveCommand<System.Reactive.Unit, System.Reactive.Unit> MoveUp { get; }
 
-        public ReactiveCommand MoveDown { get; }
+        public ReactiveCommand<System.Reactive.Unit, System.Reactive.Unit> MoveDown { get; }
 
-        public ReactiveCommand Promote { get; }
+        public ReactiveCommand<System.Reactive.Unit, System.Reactive.Unit> Promote { get; }
 
-        public ReactiveCommand Demote { get; }
+        public ReactiveCommand<System.Reactive.Unit, System.Reactive.Unit> Demote { get; }
 
-        public ReactiveCommand ViewPage { get; }
+        public ReactiveCommand<System.Reactive.Unit, System.Reactive.Unit> ViewPage { get; }
     }
 }

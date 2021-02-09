@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -34,7 +35,7 @@ namespace OneMap
 
         private void InitializeLocator()
         {
-            var logger = new LogImpl() { Level = LogLevel.Debug};
+            var logger = new DebugLogger() { Level = LogLevel.Debug};
 
             logger.Write("Started Application", LogLevel.Info);
 
@@ -65,20 +66,5 @@ namespace OneMap
         {
             Debugger.Break();
         }
-    }
-
-    public class LogImpl : ILogger
-    {
-        public void Write(string message, LogLevel logLevel)
-        {
-            if ((int)logLevel < (int)Level)
-            {
-                return;
-            }
-
-            Debug.WriteLine(message);
-        }
-
-        public LogLevel Level { get; set; }
     }
 }
